@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+#proprietary aimage ssets
+/src/assets
+
 # testing
 /coverage
 
