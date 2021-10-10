@@ -1,11 +1,13 @@
 import React, {
   createContext, useState, ReactNode, useContext,
 } from 'react';
+import useInterval from './useInterval';
 
-interface ISlaveStatus {
+export interface ISlaveStatus {
   lust:number;
   pain:number;
   fear:number;
+  consciousness:number;
   oxygen:number;
   health: number;
 }
@@ -31,14 +33,62 @@ export function SlaveProvider({ children }:IAuthProviderProps) {
     lust: 0,
     pain: 0,
     fear: 0,
+    consciousness: 100,
     oxygen: 100,
     health: 100,
   });
 
+  const [resistence, setResistence] = useState({
+    lust: 0,
+    pain: 0,
+    fear: 0,
+    consciousness: 0,
+    oxygen: 0,
+    health: 0,
+  });
+
+  function updateStatus() {
+    const decay = {
+      lust: -0.2,
+      pain: -1,
+      fear: -0.1,
+      consciousness: 0.1,
+      oxygen: 0.5,
+      health: 0,
+    };
+
+    const newStatus = { ...status };
+    // update pain
+    if (newStatus.pain > 0) {
+      newStatus.pain += decay.pain;
+    }
+
+    // update fear
+    if (newStatus.pain === 0 && newStatus.fear > 0) {
+      newStatus.fear += decay.fear;
+    }
+
+    // update consciousness
+    if (newStatus.consciousness < 100) {
+      newStatus.consciousness += decay.consciousness;
+    }
+
+    if (newStatus.oxygen < 100) {
+      newStatus.oxygen += decay.oxygen;
+    }
+    setStatus(newStatus);
+  }
+
+  useInterval(() => { updateStatus(); }, 50);
+
   function hurt(value:number) {
+    const updatedResistence = { ...resistence };
+    updatedResistence.fear += 0.1 * value;
     const updatedStatus = { ...status };
     updatedStatus.health -= value;
+    updatedStatus.pain += 2 * value;
     setStatus(updatedStatus);
+    setResistence(updatedResistence);
   }
 
   return (
