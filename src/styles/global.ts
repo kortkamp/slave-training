@@ -1,7 +1,11 @@
 /* eslint-disable import/prefer-default-export */
 import { createGlobalStyle } from 'styled-components';
 
-export const GlobalStyle = createGlobalStyle`
+interface IGlobalProps {
+  scale: number;
+}
+
+export const GlobalStyle = createGlobalStyle<IGlobalProps>`
   :root{
     --dark-green: #02793e;
     --green: #009c4f;
@@ -19,14 +23,12 @@ export const GlobalStyle = createGlobalStyle`
     
     --background: #F0F2F5;
     --shape: #ffffff;
-
-    --page-width:65rem;
     
   }
   * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    
   }
   html {
     @media (max-width: 1080px) {
@@ -35,15 +37,21 @@ export const GlobalStyle = createGlobalStyle`
     @media (max-width: 720px){
       font-size: 87.5%;
     }
-    overflow-y: scroll;
+    width: fit-content;
+    height:fit-content;
+    
+    overflow: hidden;
+
+    transform:scale(${(props) => props.scale});
+    transform-origin: left top;
+    //overflow-y: scroll;
   }
   body {
     background: var(--background);
     -webkit-font-smoothing: antialiased;
     //max-width: 52.5rem;
-    width: 100%;
-    height:100%;
-    margin: 0 auto;
+    
+    
   }
   body, input, textarea, button {
     font-family: 'Poppins', sans-serif;
@@ -54,6 +62,13 @@ export const GlobalStyle = createGlobalStyle`
   }
   button {
     cursor: pointer;
+  }
+  img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
   }
   [disabled] {
     opacity: 0.6;
