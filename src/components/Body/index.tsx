@@ -1,9 +1,13 @@
 import { Container } from './styles';
 import Head from '../Head';
+import { EmotionProvider } from '../../hooks/useEmotion';
 
+// eslint-disable-next-line no-unused-vars
 const Body = ():JSX.Element => (
   <Container>
-    <Head />
+    <EmotionProvider>
+      <Head />
+    </EmotionProvider>
   </Container>
 );
 
