@@ -42,8 +42,8 @@ const Mouth = ():JSX.Element => {
     <Container>
       <img
         src={
-          expression.head.mouth < images.length
-            ? images[expression.head.mouth].file
+          expression.face.mouth < images.length
+            ? images[expression.face.mouth].file
             : images[images.length - 1].file
         }
         alt=""

@@ -16,7 +16,7 @@ const Eyebrow = ():JSX.Element => {
   const { expression } = useEmotion();
   return (
     <Container>
-      <img src={images[expression.head.eyebrow]} alt="" />
+      <img src={images[expression.face.eyebrow]} alt="" />
     </Container>
   );
 };
