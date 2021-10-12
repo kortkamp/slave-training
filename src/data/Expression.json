@@ -1,0 +1,123 @@
+{
+  "default": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 0,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 0
+    }
+  },
+  "lust1": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 0,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 3
+    }
+  },
+  "lust2": {
+    "time": 0,
+    "face": {
+      "eyebrow": 1,
+      "eyelip": 1,
+      "pupilPosition": 0,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 3
+    }
+  },
+  "lust3": {
+    "time": 0,
+    "face": {
+      "eyebrow": 1,
+      "eyelip": 1,
+      "pupilPosition": 1,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 3
+    }
+  },
+  "lust4": {
+    "time": 0,
+    "face": {
+      "eyebrow": 1,
+      "eyelip": 2,
+      "pupilPosition": 2,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 1
+    }
+  },
+  "lust5": {
+    "time": 0,
+    "face": {
+      "eyebrow": 1,
+      "eyelip": 1,
+      "pupilPosition": 2,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 1
+    }
+  },
+  "lust6": {
+    "time": 0,
+    "face": {
+      "eyebrow": 1,
+      "eyelip": 1,
+      "pupilPosition": 2,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 2
+    }
+  },
+  "shylust1": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 2,
+      "pupilPosition": 0,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 0
+    }
+  },
+  "shylust2": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 2,
+      "pupilPosition": 0,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 4
+    }
+  },
+  "shylust4": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 2,
+      "pupilPosition": 0,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 8
+    }
+  },
+  "shylust5": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 0,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 8
+    }
+  }
+}

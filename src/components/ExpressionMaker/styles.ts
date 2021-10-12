@@ -9,23 +9,63 @@ export const Container = styled.div`
   font-size:20px;
 
   background: rgb(220,220,220,0.5);
+
+  .expName {
+    width:90px;
+   
+  }
+  & > div  {
+    & > span {
+      font-weight: 600;
+      font-size: 22px;
+      text-align:center;
+      padding-bottom:5px;
+    }
+  }
 `;
 
-export const ExpressionList = styled.div`
+export const ReactionContainer = styled.div`
   width:150px;
   padding:20px;
 
   border-right: 1px solid black;
 
-  
+  button {
+      font-size:20px; 
+  }
+
+  div {
+    display:flex;
+    justify-content:space-between;
+    margin-bottom: 5px;
+   
+    input {
+      width: 50px;
+      font-size:20px;
+    }
+    
+  }
+`;
+
+export const ExpressionList = styled.div`
+  width:170px;
+  padding:20px;
+
+  border-right: 1px solid black;
+
+  button {
+      font-size:20px;
+      
+  }
 
   div {
     display:flex;
     justify-content:space-between;
     
-    button {
+  
+    input {
+      width: 50px;
       font-size:20px;
-      
     }
     
   }
