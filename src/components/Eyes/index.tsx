@@ -13,6 +13,7 @@ import tear0 from '../../assets/fgimage/Hx1/tear/tear0.png';
 import tear1 from '../../assets/fgimage/Hx1/tear/tear1.png';
 import tear2 from '../../assets/fgimage/Hx1/tear/tear2.png';
 import tear3 from '../../assets/fgimage/Hx1/tear/tear3.png';
+import { useSlave } from '../../hooks/useSlave';
 
 const eyelipImages = [
   eyesOpen,
@@ -26,17 +27,23 @@ const tearImage = [
 
 const Eyes = ():JSX.Element => {
   const { expression } = useEmotion();
+  const { status } = useSlave();
 
-  const pupilPosition = expression.head.pupilPosition * 5;
+  const pupilPosition = expression.face.pupilPosition * 5;
 
-  const pupilRadius = (1 + expression.head.pupilRadius) / 5;
+  const pupilRadius = (1 + expression.face.pupilRadius) / 5;
+
+  let tearLevel = Math.round((status.fear) / 25);
+  if (tearLevel >= tearImage.length) {
+    tearLevel = tearImage.length - 1;
+  }
 
   return (
     <>
-      <img src={eyelipImages[expression.head.eyelip]} alt="" />
-      {expression.head.eyelip !== 2
+      <img src={eyelipImages[expression.face.eyelip]} alt="" />
+      {expression.face.eyelip !== 2
         && (
-        <Container pos={pupilPosition} radius={pupilRadius} eyelip={expression.head.eyelip}>
+        <Container pos={pupilPosition} radius={pupilRadius} eyelip={expression.face.eyelip}>
           <div className="right">
             <img src={pupil} alt="" srcSet="" />
           </div>
@@ -45,7 +52,7 @@ const Eyes = ():JSX.Element => {
           </div>
         </Container>
         )}
-      <img src={tearImage[expression.head.tear]} alt="" />
+      <img src={tearImage[tearLevel]} alt="" />
     </>
   );
 };

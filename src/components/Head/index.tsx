@@ -1,7 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { Container } from './styles';
 
-import headImg from '../../assets/fgimage/Hx1/body/head0.png';
+import head0 from '../../assets/fgimage/Hx1/body/head0.png';
+import headChoke1 from '../../assets/fgimage/Hx1/body/head0_choke1.png';
+import headChoke2 from '../../assets/fgimage/Hx1/body/head0_choke2.png';
+import headChoke3 from '../../assets/fgimage/Hx1/body/head0_choke3.png';
+import headChoke4 from '../../assets/fgimage/Hx1/body/head0_choke4.png';
 
 // import eyesClosed from '../../assets/fgimage/Hx1/body/e_def.png';
 // import eyesClosed from '../../assets/fgimage/Hx1/body/e_a_def.png';
@@ -34,18 +38,35 @@ import Eyes from '../Eyes';
 import Eyebrow from '../Eyebrow';
 import Mouth from '../Mouth';
 import ExpressionMaker from '../ExpressionMaker';
+import { useSlave } from '../../hooks/useSlave';
 
-const Head = ():JSX.Element => (
-  <Container>
-    <img src={headImg} alt="" />
+const headImages = [
+  head0,
+  headChoke1,
+  headChoke2,
+  headChoke3,
+  headChoke4,
+];
 
-    <Eyes />
-    <Mouth />
-    <Eyebrow />
-    <img src={foreheadHair} alt="" />
+const Head = ():JSX.Element => {
+  const { status } = useSlave();
 
-    <ExpressionMaker />
-  </Container>
-);
+  let headColor = Math.round((100 - status.oxygen) / 20);
+  if (headColor >= headImages.length) {
+    headColor = headImages.length - 1;
+  }
+  return (
+    <Container>
+      <img src={headImages[headColor]} alt="" />
+
+      <Eyes />
+      <Mouth />
+      <Eyebrow />
+      <img src={foreheadHair} alt="" />
+
+      <ExpressionMaker />
+    </Container>
+  );
+};
 
 export default Head;
