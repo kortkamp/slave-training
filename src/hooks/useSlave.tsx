@@ -7,7 +7,7 @@ export interface ISlaveStatus {
   lust:number;
   pain:number;
   fear:number;
-  consciousness:number;
+  energy:number;
   oxygen:number;
   health: number;
 }
@@ -33,7 +33,7 @@ export function SlaveProvider({ children }:IAuthProviderProps) {
     lust: 0,
     pain: 0,
     fear: 0,
-    consciousness: 100,
+    energy: 100,
     oxygen: 100,
     health: 100,
   });
@@ -42,7 +42,7 @@ export function SlaveProvider({ children }:IAuthProviderProps) {
     lust: 0,
     pain: 0,
     fear: 0,
-    consciousness: 0,
+    energy: 0,
     oxygen: 0,
     health: 0,
   });
@@ -52,7 +52,7 @@ export function SlaveProvider({ children }:IAuthProviderProps) {
       lust: -0.2,
       pain: -1,
       fear: -0.1,
-      consciousness: 0.1,
+      energy: 0.1,
       oxygen: 0.5,
       health: 0,
     };
@@ -66,11 +66,6 @@ export function SlaveProvider({ children }:IAuthProviderProps) {
     // update fear
     if (newStatus.pain === 0 && newStatus.fear > 0) {
       newStatus.fear += decay.fear;
-    }
-
-    // update consciousness
-    if (newStatus.consciousness < 100) {
-      newStatus.consciousness += decay.consciousness;
     }
 
     if (newStatus.oxygen < 100) {
