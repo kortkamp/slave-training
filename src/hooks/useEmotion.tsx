@@ -21,6 +21,7 @@ export interface IExpression {
     pupilRadius:number;
     tear:number;
     mouth:number;
+    legs?:number;
   }
 }
 
@@ -31,19 +32,6 @@ export interface IReaction {
     name: string;
     time:number;
   }[]
-}
-
-export interface ITimedExpression {
-  name:string;
-  time:number;
-  face: {
-    eyebrow:number;
-    eyelip:number;
-    pupilPosition:number;
-    pupilRadius:number;
-    tear:number;
-    mouth:number;
-  }
 }
 
 interface IEmotionContextData {
@@ -73,6 +61,7 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
       pupilRadius: 3,
       tear: 0,
       mouth: 0,
+      legs: 0,
     },
   });
 
@@ -89,6 +78,7 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
         pupilRadius: 3,
         tear: 0,
         mouth: 0,
+        legs: 0,
       },
     };
   }
