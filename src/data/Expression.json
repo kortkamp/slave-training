@@ -119,5 +119,41 @@
       "tear": 0,
       "mouth": 8
     }
+  },
+  "hang1": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 3,
+      "pupilPosition": 0,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 2,
+      "legs": 1
+    }
+  },
+  "hang2": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 3,
+      "pupilPosition": 0,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 2,
+      "legs": 2
+    }
+  },
+  "hang3": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 3,
+      "pupilPosition": 0,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 2,
+      "legs": 0
+    }
   }
 }
