@@ -22,6 +22,7 @@ export interface IExpression {
     tear:number;
     mouth:number;
     legs?:number;
+    arms?:number;
   }
 }
 
@@ -62,6 +63,7 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
       tear: 0,
       mouth: 0,
       legs: 0,
+      arms: 0,
     },
   });
 
@@ -79,6 +81,7 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
         tear: 0,
         mouth: 0,
         legs: 0,
+        arms: 0,
       },
     };
   }
