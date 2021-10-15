@@ -33,5 +33,42 @@
         "time": 2
       }
     ]
+  },
+  "hang": {
+    "priority": 0,
+    "expression": [
+      {
+        "name": "hang3",
+        "time": 1
+      },
+      {
+        "name": "hang2",
+        "time": 1
+      },
+      {
+        "name": "hang1",
+        "time": 1
+      },
+      {
+        "name": "hang2",
+        "time": 1
+      },
+      {
+        "name": "hang3",
+        "time": 1
+      },
+      {
+        "name": "hang2",
+        "time": 1
+      },
+      {
+        "name": "hang1",
+        "time": 1
+      },
+      {
+        "name": "hang1",
+        "time": 20
+      }
+    ]
   }
 }
