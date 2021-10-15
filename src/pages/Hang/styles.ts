@@ -6,6 +6,11 @@ export const Container = styled.div`
   width:1350px;
   position: relative;
   
+  div.hangController{
+    position:absolute;
+    top:0;
+    left: 0;
+  }
 
   img {
     top:0;
