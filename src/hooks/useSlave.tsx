@@ -22,11 +22,16 @@ interface ISlaveContextData {
   setStatus: (newStatus:ISlaveStatus) => void;
   // eslint-disable-next-line no-unused-vars
   hurt: (value:number) => void;
+  // eslint-disable-next-line no-unused-vars
+  setChokingLevel: (value:number) => void;
 }
 
 export const SlaveContext = createContext<ISlaveContextData>(
   {} as ISlaveContextData,
 );
+
+// ms
+const updateInterval = 50;
 
 export function SlaveProvider({ children }:IAuthProviderProps) {
   const [status, setStatus] = useState({
@@ -47,34 +52,51 @@ export function SlaveProvider({ children }:IAuthProviderProps) {
     health: 0,
   });
 
+  const [chokingLevel, setChokingLevel] = useState(0);
+
   function updateStatus() {
-    const decay = {
+    const change = {
       lust: -0.2,
       pain: -1,
-      fear: -0.1,
+      fear: -0.02,
       energy: 0.1,
       oxygen: 0.5,
       health: 0,
     };
 
+    if (status.health <= 0) { return; }
+
     const newStatus = { ...status };
+
     // update pain
     if (newStatus.pain > 0) {
-      newStatus.pain += decay.pain;
+      newStatus.pain += change.pain;
     }
 
     // update fear
     if (newStatus.pain === 0 && newStatus.fear > 0) {
-      newStatus.fear += decay.fear;
+      newStatus.fear += change.fear;
+    }
+    if (newStatus.fear <= 100) {
+      newStatus.fear += chokingLevel / 5;
     }
 
+    // update oxygen
     if (newStatus.oxygen < 100) {
-      newStatus.oxygen += decay.oxygen;
+      newStatus.oxygen += change.oxygen;
+    }
+    if (newStatus.oxygen > 0) {
+      newStatus.oxygen -= chokingLevel;
+    }
+
+    // update health
+    if (newStatus.oxygen <= 0) {
+      newStatus.health -= 0.15;
     }
     setStatus(newStatus);
   }
 
-  useInterval(() => { updateStatus(); }, 50);
+  useInterval(() => { updateStatus(); }, updateInterval);
 
   function hurt(value:number) {
     const updatedResistence = { ...resistence };
@@ -88,7 +110,7 @@ export function SlaveProvider({ children }:IAuthProviderProps) {
 
   return (
     <SlaveContext.Provider value={{
-      status, setStatus, hurt,
+      status, setStatus, hurt, setChokingLevel,
     }}
     >
       {children}
