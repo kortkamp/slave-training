@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface IContainerProps {
-  position: number;
+  skewAngle: number;
 }
 
 export const Container = styled.div<IContainerProps>`
@@ -9,6 +9,7 @@ export const Container = styled.div<IContainerProps>`
   left: 345px;
   top:-90px;
 
-  transform: rotate(-${(props) => props.position * 32}deg);
+  transform: rotate(-${(props) => props.skewAngle}deg);
   transform-origin: 320px 250px;
+  transition: transform 0.8s;
 `;
