@@ -10,6 +10,10 @@ export interface ISlaveStatus {
   energy:number;
   oxygen:number;
   health: number;
+
+    stretch: number,
+    depth: number,
+
 }
 
 interface IAuthProviderProps {
@@ -24,6 +28,8 @@ interface ISlaveContextData {
   hurt: (value:number) => void;
   // eslint-disable-next-line no-unused-vars
   setChokingLevel: (value:number) => void;
+  // eslint-disable-next-line no-unused-vars
+  penetrateAss: (penetration:{ depth: number, stretch: number }) => void
 }
 
 export const SlaveContext = createContext<ISlaveContextData>(
@@ -41,6 +47,10 @@ export function SlaveProvider({ children }:IAuthProviderProps) {
     energy: 100,
     oxygen: 100,
     health: 100,
+
+    stretch: 0,
+    depth: 0,
+
   });
 
   const [resistence, setResistence] = useState({
@@ -108,9 +118,28 @@ export function SlaveProvider({ children }:IAuthProviderProps) {
     setResistence(updatedResistence);
   }
 
+  function penetrateAss({ depth, stretch }:{depth: number, stretch: number }) {
+    let updatedStatus = { ...status };
+    // here we need to use this trick to get access to the last state of status.
+    setStatus((currentStatus) => {
+      updatedStatus = { ...currentStatus };
+      return currentStatus;
+    });
+
+    if (stretch > updatedStatus.stretch) {
+      updatedStatus.pain += stretch - updatedStatus.stretch;
+    }
+    if (depth > 0) {
+      updatedStatus.lust += Math.abs(depth - updatedStatus.depth) / 100;
+    }
+    updatedStatus.depth = depth;
+    updatedStatus.stretch = stretch;
+    setStatus(updatedStatus);
+  }
+
   return (
     <SlaveContext.Provider value={{
-      status, setStatus, hurt, setChokingLevel,
+      status, setStatus, hurt, setChokingLevel, penetrateAss,
     }}
     >
       {children}
