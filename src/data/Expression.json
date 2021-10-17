@@ -58,8 +58,8 @@
     "time": 0,
     "face": {
       "eyebrow": 1,
-      "eyelip": 1,
-      "pupilPosition": 2,
+      "eyelip": 0,
+      "pupilPosition": 3,
       "pupilRadius": 3,
       "tear": 0,
       "mouth": 1
@@ -69,11 +69,55 @@
     "time": 0,
     "face": {
       "eyebrow": 1,
-      "eyelip": 1,
-      "pupilPosition": 2,
+      "eyelip": 0,
+      "pupilPosition": 3,
       "pupilRadius": 3,
       "tear": 0,
       "mouth": 2
+    }
+  },
+  "lust7": {
+    "time": 0,
+    "face": {
+      "eyebrow": 1,
+      "eyelip": 0,
+      "pupilPosition": 3,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 7
+    }
+  },
+  "lust8": {
+    "time": 0,
+    "face": {
+      "eyebrow": 1,
+      "eyelip": 0,
+      "pupilPosition": 4,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 7
+    }
+  },
+  "lust9": {
+    "time": 0,
+    "face": {
+      "eyebrow": 1,
+      "eyelip": 0,
+      "pupilPosition": 4,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 5
+    }
+  },
+  "lust10": {
+    "time": 0,
+    "face": {
+      "eyebrow": 1,
+      "eyelip": 0,
+      "pupilPosition": 0,
+      "pupilRadius": 1,
+      "tear": 0,
+      "mouth": 6
     }
   },
   "shylust1": {
@@ -155,5 +199,127 @@
       "mouth": 2,
       "legs": 0
     }
+  },
+  "pain1": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 2,
+      "pupilPosition": 0,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 8
+    }
+  },
+  "pain2": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 0,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 4
+    }
+  },
+  "pain3": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 0,
+      "pupilRadius": 2,
+      "tear": 0,
+      "mouth": 5
+    }
+  },
+  "pain4": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 0,
+      "pupilRadius": 2,
+      "tear": 0,
+      "mouth": 7
+    }
+  },
+  "pain5": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 2,
+      "pupilRadius": 2,
+      "tear": 0,
+      "mouth": 7
+    }
+  },
+  "pain6": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 0,
+      "pupilRadius": 0,
+      "tear": 0,
+      "mouth": 7
+    }
+  },
+  "fear1": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 0,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 0
+    }
+  },
+  "fear2": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 0,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 4
+    }
+  },
+  "fear3": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 0,
+      "pupilRadius": 2,
+      "tear": 0,
+      "mouth": 4
+    }
+  },
+  "fear4": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 0,
+      "pupilRadius": 2,
+      "tear": 0,
+      "mouth": 5
+    }
+  },
+  "fear5": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 0,
+      "pupilRadius": 2,
+      "tear": 0,
+      "mouth": 7
+    }
   }
+  
 }
