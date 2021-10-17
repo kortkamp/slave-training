@@ -1,3 +1,4 @@
+import { useHistory } from 'react-router-dom';
 import { Container } from './styles';
 import Body from '../../components/Body';
 
@@ -14,9 +15,10 @@ import PenetratingTool from '../../components/PenetratingTool';
 
 const MainRoom = ():JSX.Element => {
   // eslint-disable-next-line no-unused-vars
-  const { mousePosition } = useMousePosition();
+  // const { mousePosition } = useMousePosition();
   console.log('main room redraw');
   // const { status } = useSlave();
+  const history = useHistory();
 
   return (
     <Container>
@@ -24,7 +26,7 @@ const MainRoom = ():JSX.Element => {
       <img className="background" src={backgroundImg} alt="" />
 
       <Body />
-      <PenetratingTool initialPosition={{ x: 753, y: 647 }} limit={250} />
+      <PenetratingTool initialPosition={{ x: 753, y: 647 }} limit={111} />
       {/* <img src={testImg} alt="" /> */}
       {/* <div>
         {position.x}
@@ -35,7 +37,8 @@ const MainRoom = ():JSX.Element => {
         {status.lust}
       </div> */}
       <StatusBox />
-      <span>{`x:${mousePosition.x} y:${mousePosition.y}`}</span>
+      {/* <span>{`x:${mousePosition.x} y:${mousePosition.y}`}</span> */}
+      <button type="button" onClick={() => history.push('/hang')}>Goto Hang</button>
     </Container>
   );
 };

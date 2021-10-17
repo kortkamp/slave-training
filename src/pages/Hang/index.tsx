@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Container } from './styles';
 
 import StatusBox from '../../components/StatusBox';
@@ -23,6 +24,7 @@ import { useSlave } from '../../hooks/useSlave';
 // import hairImg from '../../assets/fgimage/s/body/sit_fh.png';
 
 const HangRoom = ():JSX.Element => {
+  const history = useHistory();
   // eslint-disable-next-line no-unused-vars
   const [hangStep, setHangStep] = useState(0);
   // eslint-disable-next-line no-unused-vars
@@ -68,6 +70,7 @@ const HangRoom = ():JSX.Element => {
         <StatusBox />
         <ExpressionMaker />
       </EmotionProvider>
+      <button type="button" onClick={() => history.push('/')}>Goto Hang</button>
     </Container>
   );
 };
