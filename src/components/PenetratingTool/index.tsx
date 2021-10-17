@@ -35,7 +35,7 @@ const PenetratingTool = ({ initialPosition, limit }:IDraggableToolProps):JSX.Ele
   function generateSilhouetteMap() {
     const map = [
       [39, 0], [31, 4], [26, 9], [19, 19], [14, 28], [10, 38],
-      [9, 48], [9, 62], [18, 74], [28, 81], [28, 108],
+      [9, 48], [9, 62], [18, 74], [28, 81], [28, 113],
     ];
 
     const centerX = map[0][0];
