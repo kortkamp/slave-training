@@ -3,6 +3,7 @@ import { useWindowDimensions } from './useWindowDimensions';
 
 export const useMousePosition = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [mouseDown, setMouseDown] = useState(false);
 
   const { scale } = useWindowDimensions();
 
@@ -12,11 +13,15 @@ export const useMousePosition = () => {
       y: e.clientY / scale,
     });
     window.addEventListener('mousemove', setFromEvent);
+    window.addEventListener('mousedown', () => setMouseDown(true));
+    window.addEventListener('mouseup', () => setMouseDown(false));
 
     return () => {
       window.removeEventListener('mousemove', setFromEvent);
+      window.removeEventListener('mousedown', () => setMouseDown(true));
+      window.removeEventListener('mouseup', () => setMouseDown(false));
     };
   }, [scale]);
 
-  return position;
+  return { mousePosition: position, mouseDown };
 };
