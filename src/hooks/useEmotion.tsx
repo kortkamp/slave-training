@@ -1,8 +1,9 @@
 import React, {
-  createContext, useState, ReactNode, useContext,
+  createContext, useState, ReactNode, useContext, useEffect,
 } from 'react';
 
 import Expression from '../data/Expression.json';
+import { useSlave } from './useSlave';
 
 // import clone from 'clone-deep';
 // import useInterval from './useInterval';
@@ -52,6 +53,7 @@ export const EmotionContext = createContext<IEmotionContextData>(
 );
 
 export function EmotionProvider({ children }:IEmotionProviderProps) {
+  const { status } = useSlave();
   const [expression, setExpression] = useState<IExpression>({
     name: 'default',
     time: 0,
@@ -69,7 +71,45 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
 
   const [reactionTimeoutId, setReactionTimeoutId] = useState<number[]>([]);
 
+  // Here is a very tricky function to load expression from JSON
+  // I've made this mess bcuz restriction of typescript.
+  function loadExpressionFromData(name:string) {
+    interface IIndexable {
+      [key: string]: any;
+    }
+    const loadedExpression = { name, ...(Expression as IIndexable)[name] } as IExpression;
+    setExpression(loadedExpression);
+  }
+
   function getDefaultExpression() {
+    loadExpressionFromData('default');
+
+    // fear expression
+    let fearLevel = Math.round(status.fear / 20);
+    if (fearLevel > 5) {
+      fearLevel = 5;
+    }
+    if (fearLevel > 0 && fearLevel <= 5) {
+      loadExpressionFromData(`fear${fearLevel}`);
+    }
+
+    // pain expression
+    let painLevel = Math.round(status.pain / 20);
+    if (painLevel > 6) {
+      painLevel = 6;
+    }
+    if (painLevel > 0 && painLevel <= 6) {
+      loadExpressionFromData(`pain${painLevel}`);
+    }
+
+    let lustLevel = Math.round(status.lust / 20);
+    if (lustLevel > 10) {
+      lustLevel = 10;
+    }
+    if (lustLevel > 0 && lustLevel <= 10) {
+      loadExpressionFromData(`lust${lustLevel}`);
+    }
+
     return {
       name: 'default',
       time: 0,
@@ -84,15 +124,6 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
         arms: 0,
       },
     };
-  }
-  // Here is a very tricky function to load expression from JSON
-  // I've made this mess bcuz restriction of typescript.
-  function loadExpressionFromData(name:string) {
-    interface IIndexable {
-      [key: string]: any;
-    }
-    const loadedExpression = { name, ...(Expression as IIndexable)[name] } as IExpression;
-    setExpression(loadedExpression);
   }
 
   function stopReaction() {
@@ -127,6 +158,10 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
     await reactionTimeout(accumulatedTime * 1000);
     setExpression(getDefaultExpression());
   }
+
+  useEffect(() => {
+    getDefaultExpression();
+  }, [status]);
 
   return (
     <EmotionContext.Provider value={{
