@@ -29,6 +29,7 @@ interface ISlaveContextData {
   hurt: (value:number) => void;
   squirtingLevel: number;
   orgasmLevel: number;
+  orgasmProgress: number;
   chokingLevel: number;
   // eslint-disable-next-line no-unused-vars
   setChokingLevel: (value:number) => void;
@@ -119,6 +120,30 @@ export function SlaveProvider({ children }:IAuthProviderProps) {
 
   const [orgasmLevel, setOrgasmLevel] = useState(0);
 
+  const [orgasmProgress, setOrgasmProgress] = useState(0);
+
+  function doSquirt(level:number) {
+    setSquirtingLevel(level);
+    setTimeout(() => { setSquirtingLevel(0); }, 1000);
+  }
+
+  function doOrgasm() {
+    const newOrgasmLevel = 1 + Math.round((status.lust - 100) / 20);
+    console.log(`new orgasm: ${newOrgasmLevel}`);
+    setOrgasmLevel(newOrgasmLevel);
+    setOrgasmProgress(0);
+
+    setTimeout(() => {
+      setOrgasmLevel(0);
+      console.log('orgasm finished');
+      setStatus((ultranewStatus) => {
+        const newultranewStatus = clone(ultranewStatus);
+        newultranewStatus.lust = 20;
+        return newultranewStatus;
+      });
+    }, newOrgasmLevel * 2000);
+  }
+
   function updateStatus() {
     const drift = {
       lust: -0.2,
@@ -132,6 +157,7 @@ export function SlaveProvider({ children }:IAuthProviderProps) {
     if (status.health <= 0) { return; }
 
     const newStatus = { ...status };
+    let newOrgasmProgress = orgasmProgress;
 
     // update pain
     const minimunPaint = 100 - newStatus.health;
@@ -169,64 +195,57 @@ export function SlaveProvider({ children }:IAuthProviderProps) {
     newStatus.lust += newStatus.pain * preference.pain;
     newStatus.lust += 10 * chokingLevel * preference.oxygen;
 
-    newStatus.lust -= 0.01 * (0.1 * newStatus.lust + newStatus.fear);
+    if (newStatus.lust >= 0 && orgasmLevel === 0) {
+      newStatus.lust -= 0.01 * (0.1 * newStatus.lust + newStatus.fear);
+    }
+
+    // console.log(`${newStatus.lust >= 0} ${newStatus.lust} ${status.lust}`);
+
+    newOrgasmProgress += (newStatus.lust - status.lust - 0.5);
 
     // if lust continuously increase => do orgasm
 
     // update energy
-    newStatus.energy -= 0.002 * newStatus.pain * (1 - resistence.pain);
-    newStatus.energy -= 0.002 * newStatus.lust * (1 - resistence.lust);
+    newStatus.energy -= 0.001 * newStatus.pain * (1 - resistence.pain);
+    newStatus.energy -= 0.001 * newStatus.lust * (1 - resistence.lust);
 
     // ============= UPDATE BODY ==============
     // change to updateBody
-    // update stretch
-    if (newStatus.ass.stretch > minimum.ass.stretch) {
-      newStatus.ass.stretch -= resistence.ass.stretch;
-    }
 
     // do squirt
     if (squirtingLevel === 0) {
-      if (newStatus.lust > 100) {
-        if (Math.random() < 0.01) {
-          setSquirtingLevel(1 + Math.round((newStatus.lust - 100) / 20));
-          setTimeout(() => { setSquirtingLevel(0); }, 1000);
-        }
-      }
       if (newStatus.pain > 100) {
         if (Math.random() < 0.01) {
-          setSquirtingLevel(1 + Math.round((newStatus.pain - 100) / 20));
-          setTimeout(() => { setSquirtingLevel(0); }, 1000);
+          doSquirt(1 + Math.round((newStatus.pain - 100) / 20));
         }
       }
     }
     // do orgasm
-    const orgasmChance = 0.01;
-    if (orgasmLevel === 0) {
-      if (newStatus.lust > 100) {
-        if (Math.random() < orgasmChance) {
-          const newOrgasmLevel = 1 + Math.round((newStatus.lust - 100) / 20);
-          console.log(`new orgasm: ${newOrgasmLevel}`);
-          setOrgasmLevel(newOrgasmLevel);
-          setTimeout(() => {
-            setOrgasmLevel(0);
-            console.log('orgasm finished');
-            setStatus((ultranewStatus) => {
-              const newultranewStatus = clone(ultranewStatus);
-              newultranewStatus.lust -= 80;
-              return newultranewStatus;
-            });
-          }, newOrgasmLevel * 2000);
-        }
-      }
+    if (orgasmLevel === 0 && orgasmProgress > 100) {
+      doOrgasm();
     }
 
+    setOrgasmProgress(newOrgasmProgress);
     setStatus(newStatus);
   }
 
   function updateBody() {
     const newStatus = clone(status);
+
+    // update stretch
+    if (newStatus.ass.stretch > minimum.ass.stretch) {
+      newStatus.ass.stretch -= 5 * resistence.ass.stretch;
+    }
+
     if (orgasmLevel > 0) {
       newStatus.lust += Math.random() > 0.5 ? 20 : -20;
+      console.log('orgasm step');
+      if (squirtingLevel === 0) {
+        if (Math.random() < 0.99) {
+          console.log(`squirt ${1 + Math.round((status.lust - 100) / 20)}`);
+          doSquirt(1 + Math.round((status.lust - 100) / 20));
+        }
+      }
     }
 
     setStatus(newStatus);
@@ -239,10 +258,8 @@ export function SlaveProvider({ children }:IAuthProviderProps) {
     }
     setResistence(updatedResistence);
   }
-  function updateMinimum() {}
 
-  useInterval(() => { updateStatus(); updateResistence(); updateMinimum(); }, updateInterval);
-  useInterval(() => { updateBody(); }, updateBodyInterval);
+  function updateMinimum() {}
 
   function hurt(value:number) {
     const updatedResistence = { ...resistence };
@@ -255,6 +272,9 @@ export function SlaveProvider({ children }:IAuthProviderProps) {
   }
 
   function penetrateAss({ depth, stretch }:{depth: number, stretch: number }) {
+    let lust = 0;
+    let pain = 0;
+
     let updatedStatus = { ...status };
     const updatedMinimum = { ...minimum };
 
@@ -265,20 +285,26 @@ export function SlaveProvider({ children }:IAuthProviderProps) {
     });
 
     if (stretch > updatedStatus.ass.stretch) {
-      updatedStatus.pain += stretch - updatedStatus.ass.stretch;
-      updatedStatus.lust += Math.abs(stretch - updatedStatus.ass.stretch) * preference.ass.stretch;
+      pain += stretch - updatedStatus.ass.stretch;
+      lust += Math.abs(stretch - updatedStatus.ass.stretch) * preference.ass.stretch;
       updatedStatus.ass.stretch = stretch;
     }
     if (depth > 0) {
-      updatedStatus.lust += Math.abs(depth - updatedStatus.ass.depth) * preference.ass.depth;
+      lust += Math.abs(depth - updatedStatus.ass.depth) * preference.ass.depth;
     }
 
     updatedStatus.ass.depth = depth;
     updatedMinimum.ass.stretch = stretch;
+    updatedStatus.lust += lust;
+    updatedStatus.pain += pain;
 
+    setOrgasmProgress((lastValue) => lastValue + lust);
     setStatus(updatedStatus);
     setMinimum(updatedMinimum);
   }
+
+  useInterval(() => { updateStatus(); updateResistence(); updateMinimum(); }, updateInterval);
+  useInterval(() => { updateBody(); }, updateBodyInterval);
 
   return (
     <SlaveContext.Provider value={{
@@ -287,6 +313,7 @@ export function SlaveProvider({ children }:IAuthProviderProps) {
       hurt,
       chokingLevel,
       orgasmLevel,
+      orgasmProgress,
       setChokingLevel,
       squirtingLevel,
       penetrateAss,
