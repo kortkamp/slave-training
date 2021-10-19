@@ -1,36 +1,30 @@
 {
-  "test1": {
-    "priority": 1,
+  "orgasm1": {
+    "priority": 0,
     "expression": [
       {
-        "name": "default",
+        "name": "shylust2",
         "time": 1
       },
       {
-        "name": "test1",
-        "time": 2
-      }
-    ]
-  },
-  "test2": {
-    "priority": 1,
-    "expression": [
-      {
-        "name": "test2",
-        "time": 2
-      }
-    ]
-  },
-  "nome": {
-    "priority": 1,
-    "expression": [
-      {
-        "name": "default",
+        "name": "shylust4",
         "time": 1
       },
       {
-        "name": "test1",
-        "time": 2
+        "name": "shylust1",
+        "time": 0.5
+      },
+      {
+        "name": "shylust2",
+        "time": 1
+      },
+      {
+        "name": "shylust4",
+        "time": 1
+      },
+      {
+        "name": "shylust1",
+        "time": 0.5
       }
     ]
   },
@@ -68,6 +62,59 @@
       {
         "name": "hang1",
         "time": 20
+      }
+    ]
+  },
+  "orgasm3": {
+    "priority": 0,
+    "expression": [
+      {
+        "name": "lust8",
+        "time": 1
+      },
+      {
+        "name": "lust9",
+        "time": 1
+      },
+      {
+        "name": "lust8",
+        "time": 1
+      },
+      {
+        "name": "lust9",
+        "time": 1
+      },
+      {
+        "name": "lust8",
+        "time": 1
+      },
+      {
+        "name": "lust9",
+        "time": 1
+      },
+      {
+        "name": "pain4",
+        "time": 3
+      },
+      {
+        "name": "lust9",
+        "time": 1
+      },
+      {
+        "name": "lust8",
+        "time": 1
+      },
+      {
+        "name": "lust9",
+        "time": 1
+      },
+      {
+        "name": "lust8",
+        "time": 1
+      },
+      {
+        "name": "lust4",
+        "time": 3
       }
     ]
   }

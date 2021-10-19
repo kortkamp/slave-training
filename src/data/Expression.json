@@ -73,7 +73,7 @@
       "pupilPosition": 3,
       "pupilRadius": 3,
       "tear": 0,
-      "mouth": 2
+      "mouth": 8
     }
   },
   "lust7": {
@@ -84,9 +84,10 @@
       "pupilPosition": 3,
       "pupilRadius": 3,
       "tear": 0,
-      "mouth": 7
+      "mouth": 2
     }
   },
+  
   "lust8": {
     "time": 0,
     "face": {
@@ -114,8 +115,8 @@
     "face": {
       "eyebrow": 1,
       "eyelip": 0,
-      "pupilPosition": 0,
-      "pupilRadius": 1,
+      "pupilPosition": 4,
+      "pupilRadius": 3,
       "tear": 0,
       "mouth": 6
     }
