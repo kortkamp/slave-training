@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   pointer-events:none;
-  image {
-   
+  img {
+    
+    transition: transform 0.1s;
   }
 `;
