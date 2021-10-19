@@ -2,7 +2,9 @@ import React, {
   createContext, useState, ReactNode, useContext, useEffect,
 } from 'react';
 
+import clone from 'clone-deep';
 import Expression from '../data/Expression.json';
+// import ReactionList from '../data/Reaction.json';
 import { useSlave } from './useSlave';
 
 // import clone from 'clone-deep';
@@ -34,6 +36,7 @@ export interface IReaction {
     name: string;
     time:number;
   }[]
+  speech?:[];
 }
 
 interface IEmotionContextData {
@@ -54,6 +57,7 @@ export const EmotionContext = createContext<IEmotionContextData>(
 
 export function EmotionProvider({ children }:IEmotionProviderProps) {
   const { status } = useSlave();
+
   const [expression, setExpression] = useState<IExpression>({
     name: 'default',
     time: 0,
@@ -69,7 +73,8 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
     },
   });
 
-  const [reactionTimeoutId, setReactionTimeoutId] = useState<number[]>([]);
+  // eslint-disable-next-line no-unused-vars
+  const [activeReaction, setActiveReaction] = useState<IReaction>();
 
   // Here is a very tricky function to load expression from JSON
   // I've made this mess bcuz restriction of typescript.
@@ -89,25 +94,29 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
     if (fearLevel > 5) {
       fearLevel = 5;
     }
-    if (fearLevel > 0 && fearLevel <= 5) {
-      loadExpressionFromData(`fear${fearLevel}`);
-    }
 
     // pain expression
     let painLevel = Math.round(status.pain / 20);
     if (painLevel > 6) {
       painLevel = 6;
     }
-    if (painLevel > 0 && painLevel <= 6) {
-      loadExpressionFromData(`pain${painLevel}`);
-    }
 
     let lustLevel = Math.round(status.lust / 20);
     if (lustLevel > 10) {
       lustLevel = 10;
     }
+
+    if (fearLevel > 0 && fearLevel <= 5) {
+      loadExpressionFromData(`fear${fearLevel}`);
+    }
+
     if (lustLevel > 0 && lustLevel <= 10) {
       loadExpressionFromData(`lust${lustLevel}`);
+    }
+
+    painLevel -= lustLevel;
+    if (painLevel > 0 && painLevel <= 6) {
+      loadExpressionFromData(`pain${painLevel}`);
     }
 
     return {
@@ -126,42 +135,40 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
     };
   }
 
-  function stopReaction() {
-    reactionTimeoutId.forEach((id) => {
-      window.clearTimeout(id);
-    });
-    setReactionTimeoutId([]);
-  }
-
-  async function playReaction(reaction:IReaction) {
-    function reactionTimeout(ms:number) {
-      return new Promise((resolve) => {
-        const id = window.setTimeout(resolve, ms);
-        setReactionTimeoutId([...reactionTimeoutId, id]);
-      });
+  function stepReaction() {
+    const updatedReaction = clone(activeReaction);
+    const reactionStep = updatedReaction?.expression.shift();
+    if (reactionStep) {
+      loadExpressionFromData(reactionStep.name);
+      setTimeout(() => setActiveReaction(updatedReaction), 1000 * reactionStep.time);
+    } else {
+      setActiveReaction(undefined);
+      getDefaultExpression();
     }
-    let accumulatedTime = 0;
-
-    const timedExpressionList = reaction.expression.map((exp) => {
-      accumulatedTime += exp.time;
-      return ({ ...exp, time: accumulatedTime - exp.time });
-    });
-
-    stopReaction();
-
-    timedExpressionList.forEach(async (timedExpression) => {
-      await reactionTimeout(timedExpression.time * 1000);
-      loadExpressionFromData(timedExpression.name);
-      // console.log(`step ${0}`);
-    });
-
-    await reactionTimeout(accumulatedTime * 1000);
-    setExpression(getDefaultExpression());
   }
+
+  function playReaction(reaction:IReaction) {
+    // ignore less prioritable reaction
+    if (activeReaction && activeReaction.priority >= reaction.priority) { return; }
+    setActiveReaction(clone(reaction));
+  }
+  useEffect(() => {
+    if (activeReaction?.expression) {
+      stepReaction();
+    }
+  }, [activeReaction]);
 
   useEffect(() => {
-    getDefaultExpression();
+    if (!activeReaction) {
+      getDefaultExpression();
+    }
   }, [status]);
+
+  // useEffect(() => {
+  //   if (orgasmLevel > 0) {
+  //     playReaction({ name: 'orgasm', ...ReactionList.orgasm1 });
+  //   }
+  // }, [orgasmLevel]);
 
   return (
     <EmotionContext.Provider value={{
