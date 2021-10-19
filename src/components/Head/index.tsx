@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { useIntervalWhen } from 'rooks';
 import { Container } from './styles';
 
 import head0 from '../../assets/fgimage/Hx1/body/head0.png';
@@ -34,6 +35,8 @@ import headChoke4 from '../../assets/fgimage/Hx1/body/head0_choke4.png';
 // hair
 import foreheadHair from '../../assets/fgimage/Hx1/body/fh1.png';
 
+import chokeHand from '../../assets/fgimage/Hx1/hands/b_l.png';
+
 import Eyes from '../Eyes';
 import Eyebrow from '../Eyebrow';
 import Mouth from '../Mouth';
@@ -49,7 +52,7 @@ const headImages = [
 ];
 
 const Head = ():JSX.Element => {
-  const { status } = useSlave();
+  const { status, chokingLevel } = useSlave();
 
   let headColor = Math.round((100 - status.oxygen) / 20);
   if (headColor >= headImages.length) {
@@ -57,6 +60,8 @@ const Head = ():JSX.Element => {
   }
   return (
     <Container>
+      {chokingLevel > 0
+      && <img src={chokeHand} alt="" />}
       <img src={headImages[headColor]} alt="" />
 
       <Eyes />
