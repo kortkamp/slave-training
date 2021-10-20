@@ -5,11 +5,13 @@ export const Container = styled.div`
   position:absolute;
   right:0;
   bottom:0;
+  width:300px;
+  height: 300px;
   z-index:9999;
 
   border:1px solid wheat;
   border-radius:10px;
-  padding:10px 40px;
+  padding:10px 20px;
 
   display: flex;
   flex-direction: column;
@@ -18,12 +20,10 @@ export const Container = styled.div`
   &>span {
     font-size: 30px;
     font-weight: 600;
-    
   }
 
   &>div {
     transform: rotate(-90deg);
-    
   }
   background: rgb(220,220,220,0.1);
 
