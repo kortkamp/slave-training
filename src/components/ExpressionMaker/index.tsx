@@ -116,6 +116,7 @@ const ExpressionMaker = ():JSX.Element => {
     const newArray = expressionList.map((entry) => (
       [entry.name, { time: entry.time, face: entry.face }]
     ));
+    // eslint-disable-next-line no-console
     console.log(JSON.stringify(Object.fromEntries(newArray)));
   }
 
@@ -162,6 +163,7 @@ const ExpressionMaker = ():JSX.Element => {
                   expression: reaction.expression,
                 },
               };
+              // eslint-disable-next-line no-console
               console.log(JSON.stringify(obj));
             }}
           >
