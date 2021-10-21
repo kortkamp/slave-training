@@ -6,7 +6,6 @@ import deepEqual from 'deep-equal';
 
 import Expression from '../data/Expression.json';
 import ISlaveStatus from '../interfaces';
-// import ReactionList from '../data/Reaction.json';
 
 interface IEmotionProviderProps {
   children: ReactNode;
@@ -27,16 +26,6 @@ export interface IExpression {
     arms?:number;
   }
 }
-
-// export interface IReaction {
-//   name:string;
-//   priority:number;
-//   expression:{
-//     name: string;
-//     time:number;
-//   }[]
-//   speech?:[];
-// }
 
 interface IEmotionContextData {
   expression: IExpression;
@@ -72,8 +61,6 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
       arms: 0,
     },
   });
-
-  // const [activeReaction, setActiveReaction] = useState<IReaction>();
 
   // Here is a very tricky function to load expression from JSON
   // I've made this mess bcuz restriction of typescript.
@@ -136,41 +123,6 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
       setExpression(newExpression);
     }
   }
-
-  // function stepReaction() {
-  //   const updatedReaction = clone(activeReaction);
-  //   const reactionStep = updatedReaction?.expression.shift();
-  //   if (reactionStep) {
-  //     loadExpressionFromData(reactionStep.name);
-  //     setTimeout(() => setActiveReaction(updatedReaction), 1000 * reactionStep.time);
-  //   } else {
-  //     setActiveReaction(undefined);
-  //     getDefaultExpression();
-  //   }
-  // }
-
-  // function playReaction(reaction:IReaction) {
-  //   // ignore less prioritable reaction
-  //   if (activeReaction && activeReaction.priority >= reaction.priority) { return; }
-  //   setActiveReaction(clone(reaction));
-  // }
-  // useEffect(() => {
-  //   if (activeReaction?.expression) {
-  //     stepReaction();
-  //   }
-  // }, [activeReaction]);
-
-  // useEffect(() => {
-  //   if (!activeReaction) {
-  //     getDefaultExpression();
-  //   }
-  // }, [status]);
-
-  // useEffect(() => {
-  //   if (orgasmLevel > 0) {
-  //     playReaction({ name: 'orgasm', ...ReactionList.orgasm1 });
-  //   }
-  // }, [orgasmLevel]);
 
   console.log('render emotion');
 
