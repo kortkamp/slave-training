@@ -4,6 +4,7 @@ import React, {
 
 import deepEqual from 'deep-equal';
 
+import clone from 'clone-deep';
 import Expression from '../data/Expression.json';
 import ISlaveStatus from '../interfaces';
 
@@ -69,7 +70,7 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
       [key: string]: any;
     }
     const loadedExpression = { name, ...(Expression as IIndexable)[name] } as IExpression;
-    return loadedExpression;
+    return clone(loadedExpression);
   }
 
   function buildExpression(status:ISlaveStatus) {
@@ -108,15 +109,18 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
 
     newExpression.face.tear = fearLevel;
 
-    requestExpressionUpdate = !deepEqual(newExpression, expression);
-
-    // here I have a issue. deepEqual seems to be ignoring optional fields
+    // here I have an issue. deepEqual seems to be ignoring optional fields
     // so we need to manually force requestExpressionUpdate for face.color
-    const headColor = Math.round((100 - status.oxygen) / 20);
-    if (headColor !== newExpression.face.color) {
-      newExpression.face.color = headColor;
-      requestExpressionUpdate = true;
+    const chokeLevel = Math.round((100 - status.oxygen) / 20);
+    if (chokeLevel !== newExpression.face.color) {
+      newExpression.face.color = chokeLevel;
     }
+
+    if (chokeLevel > 3) {
+      newExpression.face.pupilPosition = chokeLevel - 1;
+    }
+
+    requestExpressionUpdate = !deepEqual(newExpression, expression);
 
     // update state just in case of expression really changed
     if (requestExpressionUpdate) {
