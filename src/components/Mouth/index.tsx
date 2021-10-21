@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
-import { useEffect, useState } from 'react';
-import { Container, TestButton } from './styles';
+import { Container } from './styles';
 
 // mouth
 import mouthClosed from '../../assets/fgimage/Hx1/body/m_n.png';
@@ -17,7 +15,7 @@ import { useEmotion } from '../../hooks/useEmotion';
 
 const Mouth = ():JSX.Element => {
   // never change that damm order in the array below or you gonna
-  // fuck all the game, to add new images , always put then after the array alements
+  // fuck all the game, to add new images , always put then after the last element
   const images = [
     { file: mouthClosed, name: 'mouthClosed' },
     { file: mouthSmile, name: 'mouthSmile' },
@@ -34,10 +32,6 @@ const Mouth = ():JSX.Element => {
 
   const { expression } = useEmotion();
 
-  function setMouth() {
-
-  }
-
   return (
     <Container>
       <img
@@ -48,7 +42,6 @@ const Mouth = ():JSX.Element => {
         }
         alt=""
       />
-
     </Container>
   );
 };
