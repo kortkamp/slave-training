@@ -2,13 +2,13 @@
 /* eslint-disable react/button-has-type */
 import { useState } from 'react';
 import clone from 'clone-deep';
-import { IExpression, IReaction, useEmotion } from '../../hooks/useEmotion';
+import { IExpression, useEmotion } from '../../hooks/useEmotion';
 import {
-  Container, ExpressionEditor, ExpressionList, ReactionContainer, SelectorStyle,
+  Container, ExpressionEditor, ExpressionList, SelectorStyle,
 } from './styles';
 
 import Expression from '../../data/Expression.json';
-import Reaction from '../../data/Reaction.json';
+// import Reaction from '../../data/Reaction.json';
 
 interface ISelectorProps {
   title:string;
@@ -31,7 +31,7 @@ const Selector = ({ title, value, setValue }:ISelectorProps):JSX.Element => (
 
 const ExpressionMaker = ():JSX.Element => {
   const {
-    expression, setExpression, playReaction, loadExpressionFromData,
+    expression, setExpression, loadExpressionFromData,
   } = useEmotion();
 
   const [expressionList, setExpressionList] = useState<IExpression[]>(
@@ -44,11 +44,11 @@ const ExpressionMaker = ():JSX.Element => {
     )),
   );
 
-  const [reaction, setReaction] = useState<IReaction>({
-    name: '',
-    priority: 0,
-    expression: [],
-  });
+  // const [reaction, setReaction] = useState<IReaction>({
+  //   name: '',
+  //   priority: 0,
+  //   expression: [],
+  // });
 
   function setValue(keyName:string, value:number) {
     const newExpression = { ...expression };
@@ -106,11 +106,12 @@ const ExpressionMaker = ():JSX.Element => {
   function setReactionItemTime(item:IExpression, value:number) {
 
   }
-  function addToReaction(timedExpression:IExpression) {
-    const newReaction = clone(reaction);
-    newReaction.expression.push({ name: timedExpression.name, time: timedExpression.time });
-    setReaction(newReaction);
-  }
+
+  // function addToReaction(timedExpression:IExpression) {
+  //   const newReaction = clone(reaction);
+  //   newReaction.expression.push({ name: timedExpression.name, time: timedExpression.time });
+  //   setReaction(newReaction);
+  // }
 
   function generateExpressionJson() {
     const newArray = expressionList.map((entry) => (
@@ -120,15 +121,15 @@ const ExpressionMaker = ():JSX.Element => {
     console.log(JSON.stringify(Object.fromEntries(newArray)));
   }
 
-  function loadReaction(value:IReaction) {
-    setReaction(value);
-  }
+  // function loadReaction(value:IReaction) {
+  //   setReaction(value);
+  // }
 
   const expressionKeys = Object.keys(expression.face);
 
   return (
     <Container>
-      <ReactionContainer>
+      {/* <ReactionContainer>
         <span>
           Reaction List
         </span>
@@ -143,8 +144,8 @@ const ExpressionMaker = ():JSX.Element => {
             </button>
           </div>
         ))}
-      </ReactionContainer>
-      <ReactionContainer>
+      </ReactionContainer> */}
+      {/* <ReactionContainer>
         <span>Reaction</span>
         <div>
           <button
@@ -196,13 +197,13 @@ const ExpressionMaker = ():JSX.Element => {
           </div>
         ))}
 
-      </ReactionContainer>
+      </ReactionContainer> */}
       <ExpressionList>
         <span>Expression List</span>
         <button onClick={() => generateExpressionJson()}>JSON</button>
         {expressionList.map((item) => (
           <div key={item.name}>
-            <button onClick={() => addToReaction({ ...item })}>{'<'}</button>
+            {/* <button onClick={() => addToReaction({ ...item })}>{'<'}</button> */}
             <button className="expName" onClick={() => setExpression(clone(item))}>
               {item.name}
             </button>
