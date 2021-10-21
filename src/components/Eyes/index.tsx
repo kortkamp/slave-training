@@ -21,22 +21,20 @@ const eyelipImages = [
   eyesClosed,
 ];
 
-const tearImage = [
+const tearImages = [
   tear0, tear1, tear2, tear3,
 ];
 
 const Eyes = ():JSX.Element => {
   const { expression } = useEmotion();
-  const { status } = useSlave();
 
   const pupilPosition = expression.face.pupilPosition * 5;
 
   const pupilRadius = (1 + expression.face.pupilRadius) / 5;
 
-  let tearLevel = Math.round((status.fear) / 25);
-  if (tearLevel >= tearImage.length) {
-    tearLevel = tearImage.length - 1;
-  }
+  const tearLevel = expression.face.tear < tearImages.length
+    ? expression.face.tear
+    : tearImages.length - 1;
 
   return (
     <>
@@ -52,7 +50,7 @@ const Eyes = ():JSX.Element => {
           </div>
         </Container>
         )}
-      <img src={tearImage[tearLevel]} alt="" />
+      <img src={tearImages[tearLevel]} alt="" />
     </>
   );
 };
