@@ -2,13 +2,11 @@ import React, {
   createContext, useState, ReactNode, useContext,
 } from 'react';
 
-// import clone from 'clone-deep';
+import deepEqual from 'deep-equal';
+
 import Expression from '../data/Expression.json';
 import ISlaveStatus from '../interfaces';
 // import ReactionList from '../data/Reaction.json';
-
-// import clone from 'clone-deep';
-// import useInterval from './useInterval';
 
 interface IEmotionProviderProps {
   children: ReactNode;
@@ -24,6 +22,7 @@ export interface IExpression {
     pupilRadius:number;
     tear:number;
     mouth:number;
+    color?:number;
     legs?:number;
     arms?:number;
   }
@@ -68,6 +67,7 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
       pupilRadius: 3,
       tear: 0,
       mouth: 0,
+      color: 0,
       legs: 0,
       arms: 0,
     },
@@ -86,6 +86,7 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
   }
 
   function buildExpression(status:ISlaveStatus) {
+    let requestExpressionUpdate = false;
     let newExpression = loadExpressionFromData('default');
 
     // fear expression
@@ -120,7 +121,20 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
 
     newExpression.face.tear = fearLevel;
 
-    setExpression(newExpression);
+    requestExpressionUpdate = !deepEqual(newExpression, expression);
+
+    // here I have a issue. deepEqual seems to be ignoring optional fields
+    // so we need to manually force requestExpressionUpdate for face.color
+    const headColor = Math.round((100 - status.oxygen) / 20);
+    if (headColor !== newExpression.face.color) {
+      newExpression.face.color = headColor;
+      requestExpressionUpdate = true;
+    }
+
+    // update state just in case of expression really changed
+    if (requestExpressionUpdate) {
+      setExpression(newExpression);
+    }
   }
 
   // function stepReaction() {
@@ -157,6 +171,8 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
   //     playReaction({ name: 'orgasm', ...ReactionList.orgasm1 });
   //   }
   // }, [orgasmLevel]);
+
+  console.log('render emotion');
 
   return (
     <EmotionContext.Provider value={{
