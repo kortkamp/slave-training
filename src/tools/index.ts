@@ -1,4 +1,5 @@
 import penisImg from '../assets/fgimage/Hx1/tools/prone_penis.png';
+import fistImg from '../assets/fgimage/Hx1/tools/fist.png';
 import plugImg from '../assets/fgimage/Hx1/tools/prone_plug.png';
 import ballsImg from '../assets/fgimage/Hx1/tools/thai_balls.png';
 
@@ -6,7 +7,7 @@ export interface IToolData {
   name:string;
   image:string;
   depthLimit: number;
-  type: 'penetrator'|'draggable'|'fixed';
+  type: 'penetrator'|'draggable'|'fixed'|'elastic';
   map:number[][];
 }
 
@@ -17,6 +18,16 @@ const Penis:IToolData = {
   depthLimit: 268,
   map: [
     [49, 0], [38, 4], [19, 25], [12, 41], [7, 65], [4, 89], [1, 203], [3, 268], [14, 252],
+  ],
+};
+
+const Fist:IToolData = {
+  name: 'fist',
+  image: fistImg,
+  type: 'elastic',
+  depthLimit: 500,
+  map: [
+
   ],
 };
 
@@ -51,4 +62,4 @@ const Balls:IToolData = {
   ],
 };
 
-export const Tools = [Penis, Plug, Balls];
+export const Tools = [Penis, Plug, Balls, Fist];

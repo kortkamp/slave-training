@@ -6,23 +6,49 @@ import {
 
 import { Container } from './styles';
 
-import toolImg from '../../assets/fgimage/Hx1/tools/fist.png';
 import { useWindowDimensions } from '../../hooks/useWindowDimensions';
+import { IToolData } from '../../tools';
 
-const DraggableTool = ():JSX.Element => {
-  const [isDragging, setIsDragging] = useState(false);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-  const ref = useRef<HTMLImageElement>(null);
+interface IDraggableToolProps {
+  initialPosition: {
+    x: number, y:number
+  };
+
+  tool: IToolData;
+  // eslint-disable-next-line no-unused-vars
+  action: (value:number)=>void;
+}
+
+const ElasticTool = ({ initialPosition, tool, action }:IDraggableToolProps):JSX.Element => {
   const { scale } = useWindowDimensions();
+  const ref = useRef<HTMLImageElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [pos, setPos] = useState({
+    x: 0,
+    y: 0,
+  });
+
+  function executeAction(value: number) {
+    console.log(value);
+    action(value);
+  }
 
   function onMouseMove(e:any) {
     if (!isDragging) return;
 
     if (ref.current) {
-      setPos({
-        x: ref.current.offsetLeft + e.movementX / scale,
+      const newPosition = {
+        x: pos.x,
         y: ref.current.offsetTop + e.movementY / scale,
-      });
+      };
+      if (newPosition.y > tool.depthLimit) {
+        newPosition.y = tool.depthLimit;
+      }
+      if (newPosition.y < 0) {
+        newPosition.y = 0;
+      }
+
+      setPos(newPosition);
     }
     e.stopPropagation();
     e.preventDefault();
@@ -30,6 +56,11 @@ const DraggableTool = ():JSX.Element => {
 
   function onMouseUp(e:any) {
     setIsDragging(false);
+    setPos((currentPos) => {
+      executeAction(currentPos.y / 5);
+      return ({ x: currentPos.x, y: 0 });
+    });
+
     e.stopPropagation();
     e.preventDefault();
   }
@@ -54,6 +85,18 @@ const DraggableTool = ():JSX.Element => {
     };
   }, [ref.current]);
 
+  useEffect(() => {
+    if (ref.current) {
+      setPos({
+        x: 0 - ((ref.current.width) / 2),
+        y: 0,
+      });
+    }
+    return () => {
+
+    };
+  }, [ref.current?.width]);
+
   // Everytime the isDragging state changes, assign or remove
   // the corresponding mousemove and mouseup handlers
   useEffect(() => {
@@ -71,10 +114,17 @@ const DraggableTool = ():JSX.Element => {
   }, [isDragging]);
 
   return (
-    <Container>
+    <Container
+      style={{
+        position: 'absolute',
+        left: initialPosition.x,
+        top: initialPosition.y,
+      }}
+    >
       <img
+        className={isDragging ? '' : 'released'}
         ref={ref}
-        src={toolImg}
+        src={tool.image}
         alt=""
         style={{
           position: 'absolute',
@@ -82,10 +132,9 @@ const DraggableTool = ():JSX.Element => {
           top: pos.y,
           touchAction: 'none',
         }}
-
       />
     </Container>
   );
 };
 
-export default DraggableTool;
+export default ElasticTool;
