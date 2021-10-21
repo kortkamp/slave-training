@@ -1,11 +1,11 @@
 import React, {
-  createContext, useState, ReactNode, useContext, useEffect,
+  createContext, useState, ReactNode, useContext,
 } from 'react';
 
-import clone from 'clone-deep';
+// import clone from 'clone-deep';
 import Expression from '../data/Expression.json';
+import ISlaveStatus from '../interfaces';
 // import ReactionList from '../data/Reaction.json';
-import { useSlave } from './useSlave';
 
 // import clone from 'clone-deep';
 // import useInterval from './useInterval';
@@ -29,26 +29,28 @@ export interface IExpression {
   }
 }
 
-export interface IReaction {
-  name:string;
-  priority:number;
-  expression:{
-    name: string;
-    time:number;
-  }[]
-  speech?:[];
-}
+// export interface IReaction {
+//   name:string;
+//   priority:number;
+//   expression:{
+//     name: string;
+//     time:number;
+//   }[]
+//   speech?:[];
+// }
 
 interface IEmotionContextData {
   expression: IExpression;
   // eslint-disable-next-line no-unused-vars
   setExpression: (newExpression:IExpression) => void;
 
-  // eslint-disable-next-line no-unused-vars
-  playReaction: (reaction:IReaction) => void;
+  // playReaction: (reaction:IReaction) => void;
 
   // eslint-disable-next-line no-unused-vars
   loadExpressionFromData: (name:string)=>void;
+
+  // eslint-disable-next-line no-unused-vars
+  buildExpression: (status:ISlaveStatus) => void
 }
 
 export const EmotionContext = createContext<IEmotionContextData>(
@@ -56,8 +58,6 @@ export const EmotionContext = createContext<IEmotionContextData>(
 );
 
 export function EmotionProvider({ children }:IEmotionProviderProps) {
-  const { status } = useSlave();
-
   const [expression, setExpression] = useState<IExpression>({
     name: 'default',
     time: 0,
@@ -73,8 +73,7 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
     },
   });
 
-  // eslint-disable-next-line no-unused-vars
-  const [activeReaction, setActiveReaction] = useState<IReaction>();
+  // const [activeReaction, setActiveReaction] = useState<IReaction>();
 
   // Here is a very tricky function to load expression from JSON
   // I've made this mess bcuz restriction of typescript.
@@ -83,11 +82,11 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
       [key: string]: any;
     }
     const loadedExpression = { name, ...(Expression as IIndexable)[name] } as IExpression;
-    setExpression(loadedExpression);
+    return loadedExpression;
   }
 
-  function getDefaultExpression() {
-    loadExpressionFromData('default');
+  function buildExpression(status:ISlaveStatus) {
+    let newExpression = loadExpressionFromData('default');
 
     // fear expression
     let fearLevel = Math.round(status.fear / 20);
@@ -107,62 +106,51 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
     }
 
     if (fearLevel > 0 && fearLevel <= 5) {
-      loadExpressionFromData(`fear${fearLevel}`);
+      newExpression = loadExpressionFromData(`fear${fearLevel}`);
     }
 
     if (lustLevel > 0 && lustLevel <= 10) {
-      loadExpressionFromData(`lust${lustLevel}`);
+      newExpression = loadExpressionFromData(`lust${lustLevel}`);
     }
 
     painLevel -= lustLevel;
     if (painLevel > 0 && painLevel <= 6) {
-      loadExpressionFromData(`pain${painLevel}`);
+      newExpression = loadExpressionFromData(`pain${painLevel}`);
     }
 
-    return {
-      name: 'default',
-      time: 0,
-      face: {
-        eyebrow: 0,
-        eyelip: 0,
-        pupilPosition: 0,
-        pupilRadius: 3,
-        tear: 0,
-        mouth: 0,
-        legs: 0,
-        arms: 0,
-      },
-    };
+    newExpression.face.tear = fearLevel;
+
+    setExpression(newExpression);
   }
 
-  function stepReaction() {
-    const updatedReaction = clone(activeReaction);
-    const reactionStep = updatedReaction?.expression.shift();
-    if (reactionStep) {
-      loadExpressionFromData(reactionStep.name);
-      setTimeout(() => setActiveReaction(updatedReaction), 1000 * reactionStep.time);
-    } else {
-      setActiveReaction(undefined);
-      getDefaultExpression();
-    }
-  }
+  // function stepReaction() {
+  //   const updatedReaction = clone(activeReaction);
+  //   const reactionStep = updatedReaction?.expression.shift();
+  //   if (reactionStep) {
+  //     loadExpressionFromData(reactionStep.name);
+  //     setTimeout(() => setActiveReaction(updatedReaction), 1000 * reactionStep.time);
+  //   } else {
+  //     setActiveReaction(undefined);
+  //     getDefaultExpression();
+  //   }
+  // }
 
-  function playReaction(reaction:IReaction) {
-    // ignore less prioritable reaction
-    if (activeReaction && activeReaction.priority >= reaction.priority) { return; }
-    setActiveReaction(clone(reaction));
-  }
-  useEffect(() => {
-    if (activeReaction?.expression) {
-      stepReaction();
-    }
-  }, [activeReaction]);
+  // function playReaction(reaction:IReaction) {
+  //   // ignore less prioritable reaction
+  //   if (activeReaction && activeReaction.priority >= reaction.priority) { return; }
+  //   setActiveReaction(clone(reaction));
+  // }
+  // useEffect(() => {
+  //   if (activeReaction?.expression) {
+  //     stepReaction();
+  //   }
+  // }, [activeReaction]);
 
-  useEffect(() => {
-    if (!activeReaction) {
-      getDefaultExpression();
-    }
-  }, [status]);
+  // useEffect(() => {
+  //   if (!activeReaction) {
+  //     getDefaultExpression();
+  //   }
+  // }, [status]);
 
   // useEffect(() => {
   //   if (orgasmLevel > 0) {
@@ -172,7 +160,7 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
 
   return (
     <EmotionContext.Provider value={{
-      expression, setExpression, playReaction, loadExpressionFromData,
+      expression, setExpression, loadExpressionFromData, buildExpression,
     }}
     >
       {children}
