@@ -40,7 +40,7 @@ const HangRoom = ():JSX.Element => {
     const updatedValue = liftHeight + value;
     if (neckTied) {
       if (updatedValue >= 0 && updatedValue <= 300) { setLiftHeight(updatedValue); }
-      if (updatedValue > 0) { setChokingLevel(0.7); } else { setChokingLevel(0); }
+      if (updatedValue > 0) { setChokingLevel(0.6); } else { setChokingLevel(0); }
     }
   }
   return (
