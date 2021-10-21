@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-import { useIntervalWhen } from 'rooks';
 import { Container } from './styles';
 
 import head0 from '../../assets/fgimage/Hx1/body/head0.png';
@@ -35,13 +33,13 @@ import headChoke4 from '../../assets/fgimage/Hx1/body/head0_choke4.png';
 // hair
 import foreheadHair from '../../assets/fgimage/Hx1/body/fh1.png';
 
-import chokeHand from '../../assets/fgimage/Hx1/hands/b_l.png';
+// import chokeHand from '../../assets/fgimage/Hx1/hands/b_l.png';
 
 import Eyes from '../Eyes';
 import Eyebrow from '../Eyebrow';
 import Mouth from '../Mouth';
-import ExpressionMaker from '../ExpressionMaker';
-import { useSlave } from '../../hooks/useSlave';
+// import ExpressionMaker from '../ExpressionMaker';
+import { useEmotion } from '../../hooks/useEmotion';
 
 const headImages = [
   head0,
@@ -52,24 +50,29 @@ const headImages = [
 ];
 
 const Head = ():JSX.Element => {
-  const { status, chokingLevel } = useSlave();
+  const { expression } = useEmotion();
 
-  let headColor = Math.round((100 - status.oxygen) / 20);
-  if (headColor >= headImages.length) {
-    headColor = headImages.length - 1;
+  let chokeIndex = 0;
+  if (expression.face.color) {
+    if (expression.face.color < headImages.length) {
+      chokeIndex = expression.face.color;
+    } else {
+      chokeIndex = headImages.length - 1;
+    }
   }
+
   return (
     <Container>
-      {chokingLevel > 0
-      && <img src={chokeHand} alt="" />}
-      <img src={headImages[headColor]} alt="" />
+      {/* {chokingLevel > 0
+      && <img src={chokeHand} alt="" />} */}
+      <img src={headImages[chokeIndex]} alt="" />
 
       <Eyes />
       <Mouth />
       <Eyebrow />
       <img src={foreheadHair} alt="" />
 
-      <ExpressionMaker />
+      {/* <ExpressionMaker /> */}
     </Container>
   );
 };
