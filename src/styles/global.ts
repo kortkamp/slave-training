@@ -23,6 +23,10 @@ export const GlobalStyle = createGlobalStyle<IGlobalProps>`
     
     --background: #F0F2F5;
     --shape: #ffffff;
+
+
+    // z-index list
+    --tool-z-index:1005;
     
   }
   * {
