@@ -31,43 +31,61 @@ const PenetratingTool = ({ initialPosition, tool }:IDraggableToolProps):JSX.Elem
 
   const [silhouetteMap, setSilhouetteMap] = useState<number[]>([]);
 
-  const { penetrateAss } = useSlave();
+  const { penetrateAss, setChokingLevel } = useSlave();
 
   function generateSilhouetteMap() {
-    // const map = [
-    //   [49, 0], [38, 4], [19, 25], [12, 41], [7, 65], [4, 89], [1, 203], [3, 268], [14, 252],
-    // ];
-
-    const centerX = tool.map[0][0];
-
     const expandedMap = [0];
-    let lastPoint = tool.map[0];
-    tool.map.forEach((point) => {
-      if (point !== lastPoint) {
-        const diff = [point[0] - lastPoint[0], point[1] - lastPoint[1]];
-        const linear = diff[0] / diff[1];
-        // eslint-disable-next-line no-plusplus
-        for (let i = lastPoint[1] + 1; i <= point[1]; i++) {
-          expandedMap[i] = centerX - ((i - lastPoint[1]) * linear + lastPoint[0]);
+
+    if (tool.map.length > 0) {
+      const centerX = tool.map[0][0];
+
+      let lastPoint = tool.map[0];
+      tool.map.forEach((point) => {
+        if (point !== lastPoint) {
+          const diff = [point[0] - lastPoint[0], point[1] - lastPoint[1]];
+          const linear = diff[0] / diff[1];
+          // eslint-disable-next-line no-plusplus
+          for (let i = lastPoint[1] + 1; i <= point[1]; i++) {
+            expandedMap[i] = centerX - ((i - lastPoint[1]) * linear + lastPoint[0]);
+          }
+          lastPoint = point;
         }
-        lastPoint = point;
-      }
-    });
+      });
+    }
     setSilhouetteMap(expandedMap);
   }
-
+  function strangle(depth:number) {
+    setChokingLevel(depth / tool.depthLimit);
+  }
   function penetrate(depth:number) {
-    let stretch = 0;
-    if (depth <= silhouetteMap.length) {
-      stretch = silhouetteMap[Math.round(depth)];
+    if (tool.name === 'strangle') {
+      strangle(depth);
+    } else {
+      let stretch = 0;
+      if (depth <= silhouetteMap.length) {
+        stretch = silhouetteMap[Math.round(depth)];
+      }
+      if (stretch === undefined) {
+        stretch = 0;
+      }
+      penetrateAss({ depth, stretch });
     }
-    penetrateAss({ depth, stretch });
+  }
+
+  function removeTool() {
+    console.log(`remove${tool}`);
+    penetrate(0);
   }
 
   useEffect(() => {
     penetrate(0);
     generateSilhouetteMap();
   }, [tool]);
+
+  useEffect(() => {
+    console.log('create');
+    return () => { removeTool(); };
+  }, []);
 
   function onMouseMove(e:any) {
     if (!isDragging) return;
@@ -83,7 +101,9 @@ const PenetratingTool = ({ initialPosition, tool }:IDraggableToolProps):JSX.Elem
       if (newPosition.y < -tool.depthLimit) {
         newPosition.y = -tool.depthLimit;
       }
+
       penetrate(newPosition.y < 0 ? -newPosition.y : 0);
+
       setPos(newPosition);
     }
     e.stopPropagation();
@@ -150,6 +170,8 @@ const PenetratingTool = ({ initialPosition, tool }:IDraggableToolProps):JSX.Elem
         position: 'absolute',
         left: initialPosition.x,
         top: initialPosition.y,
+        transform: `rotate(${tool.angle}deg)`,
+
       }}
     >
       <img
