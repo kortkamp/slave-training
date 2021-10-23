@@ -8,14 +8,8 @@ import slaveImg from '../../assets/slave.svg';
 import medicineImg from '../../assets/medicine.svg';
 import ToolsModal from '../ToolsModal';
 import LocationsModal from '../LocationsModal';
-import { IToolData } from '../../tools';
 
-interface IToolBoxProps {
-  // eslint-disable-next-line no-unused-vars
-  selectTool: (tool:IToolData)=>void;
-}
-
-const ToolsBox = ({ selectTool }:IToolBoxProps):JSX.Element => {
+const ToolsBox = ():JSX.Element => {
   const [isToolsModalOpen, setIsToolsModalOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationsModalOpen] = useState(false);
   return (
@@ -38,7 +32,7 @@ const ToolsBox = ({ selectTool }:IToolBoxProps):JSX.Element => {
       <ToolsModal
         isOpen={isToolsModalOpen}
         onRequestClose={() => setIsToolsModalOpen(false)}
-        selectTool={selectTool}
+
       />
       <LocationsModal
         isOpen={isLocationModalOpen}

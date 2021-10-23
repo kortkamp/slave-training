@@ -35,5 +35,20 @@ export const Container = styled.div`
       }
     }
   }
+  img.selected {
+    filter:opacity(0.3);
+  }
+
+  
 
 `;
+
+export const ActiveTools = styled.div`
+    position: fixed;
+    left: 0;
+    top:0;
+    /* z-index: var(--tool-z-index); */
+    .tool{
+
+    }
+    `;
