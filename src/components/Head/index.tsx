@@ -33,13 +33,12 @@ import headChoke4 from '../../assets/fgimage/Hx1/body/head0_choke4.png';
 // hair
 import foreheadHair from '../../assets/fgimage/Hx1/body/fh1.png';
 
-// import chokeHand from '../../assets/fgimage/Hx1/hands/b_l.png';
-
 import Eyes from '../Eyes';
 import Eyebrow from '../Eyebrow';
 import Mouth from '../Mouth';
 // import ExpressionMaker from '../ExpressionMaker';
 import { useEmotion } from '../../hooks/useEmotion';
+import { useSlave } from '../../hooks/useSlave';
 
 const headImages = [
   head0,
@@ -51,6 +50,7 @@ const headImages = [
 
 const Head = ():JSX.Element => {
   const { expression } = useEmotion();
+  const { chokingLevel } = useSlave();
 
   let chokeIndex = 0;
   if (expression.face.color) {
@@ -61,8 +61,14 @@ const Head = ():JSX.Element => {
     }
   }
 
+  const strangleLevel = chokingLevel * 10;
+
   return (
-    <Container>
+    <Container
+      style={{
+        transform: `rotate(${strangleLevel * 2}deg)`,
+      }}
+    >
       {/* {chokingLevel > 0
       && <img src={chokeHand} alt="" />} */}
       <img src={headImages[chokeIndex]} alt="" />
