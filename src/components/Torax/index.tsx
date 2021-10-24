@@ -30,11 +30,14 @@ const Torax = ():JSX.Element => {
       newBreathInterval = 400;
     }
     setBreathInterval(newBreathInterval);
-  }, [status.lust, status.fear, status.health]);
+  }, [status.lust, status.fear]);
 
   useEffect(() => {
     doBreath();
   }, []);
+
+  // TODO improve performance to not render unnecessarily
+  // TODO when choked till health zero torax dont stop
 
   return (
     <Container>
@@ -43,7 +46,7 @@ const Torax = ():JSX.Element => {
         alt=""
         style={
           {
-            transform: `translate(-${isInspiring && status.health ? 2 : 0}px,-${isInspiring && status.health ? 3 : 0}px)`,
+            transform: `translate(-${isInspiring && status.oxygen > 0 ? 2 : 0}px,-${isInspiring && status.oxygen > 0 ? 3 : 0}px)`,
             transition: `transform ${breathInterval}ms ease-in-out`,
           }
         }
