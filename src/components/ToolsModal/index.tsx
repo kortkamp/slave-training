@@ -6,8 +6,8 @@ import { ActiveTools, Container } from './styles';
 import closeImg from '../../assets/close.svg';
 
 import { IToolData, Tools } from '../../tools';
-import PenetratingTool from '../PenetratingTool';
-import ElasticTool from '../ElasticTool';
+import PenetratingTool from '../tools/PenetratingTool';
+import ElasticTool from '../tools/ElasticTool';
 
 interface IToolsModalProps {
   isOpen: boolean;
@@ -50,6 +50,7 @@ const ToolsModal = ({
   return (
     <>
       <Modal
+        key="toolmodal"
         isOpen={isOpen}
         onRequestClose={onRequestClose}
         overlayClassName="react-modal-overlay"
@@ -78,7 +79,7 @@ const ToolsModal = ({
           </div>
         </Container>
       </Modal>
-      <ActiveTools style={{ zIndex: 1030 }}>
+      <ActiveTools key="asd" style={{ zIndex: 1030 }}>
         {selectedTools.map((tool) => {
           if (tool?.type === 'elastic') {
             return (
@@ -90,23 +91,23 @@ const ToolsModal = ({
               />
             );
           }
-          return <></>;
+          return undefined;
         })}
 
       </ActiveTools>
-      <ActiveTools style={{ zIndex: 1005 }}>
+      <ActiveTools key="334243" style={{ zIndex: 1005 }}>
         {selectedTools.map((tool) => {
           if (tool?.type === 'penetrator') {
             return (
               <PenetratingTool
                 key={tool.name}
-                initialPosition={bodyLocations.ass}
+                initialPosition={tool.name === 'strangle' ? bodyLocations.neck : bodyLocations.ass}
                 tool={tool}
               />
 
             );
           }
-          return <></>;
+          return undefined;
         })}
 
       </ActiveTools>
