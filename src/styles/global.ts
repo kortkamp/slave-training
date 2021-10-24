@@ -94,7 +94,7 @@ export const GlobalStyle = createGlobalStyle<IGlobalProps>`
   }
   .react-modal-content {
     width: 100%;
-    max-width: 576px;
+    max-width: fit-content;
     background: var(--background);
     padding: 3rem;
     position: relative;
