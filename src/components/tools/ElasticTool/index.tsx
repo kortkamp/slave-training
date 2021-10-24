@@ -6,8 +6,8 @@ import {
 
 import { Container } from './styles';
 
-import { useWindowDimensions } from '../../hooks/useWindowDimensions';
-import { IToolData } from '../../tools';
+import { useWindowDimensions } from '../../../hooks/useWindowDimensions';
+import { IToolData } from '../../../tools';
 
 interface IDraggableToolProps {
   initialPosition: {

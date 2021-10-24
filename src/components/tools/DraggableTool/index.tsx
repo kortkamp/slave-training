@@ -6,8 +6,8 @@ import {
 
 import { Container } from './styles';
 
-import toolImg from '../../assets/fgimage/Hx1/tools/fist.png';
-import { useWindowDimensions } from '../../hooks/useWindowDimensions';
+import toolImg from '../../../assets/fgimage/Hx1/tools/fist.png';
+import { useWindowDimensions } from '../../../hooks/useWindowDimensions';
 
 const DraggableTool = ():JSX.Element => {
   const [isDragging, setIsDragging] = useState(false);

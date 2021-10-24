@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unused-prop-types */
 import {
@@ -8,39 +10,51 @@ import {
 
 import { Container } from './styles';
 
-import { useWindowDimensions } from '../../hooks/useWindowDimensions';
-import { useSlave } from '../../hooks/useSlave';
-import { IToolData } from '../../tools';
+import { useWindowDimensions } from '../../../hooks/useWindowDimensions';
+import { useSlave } from '../../../hooks/useSlave';
+import { IToolData } from '../../../tools';
+import { useAss } from '../../../hooks/useAss';
 
-interface IDraggableToolProps {
-  initialPosition: {
-    x: number, y:number
-  };
+import syringeImgExt from '../../../assets/fgimage/Hx1/tools/syringe0.png';
+import syringeImgInt from '../../../assets/fgimage/Hx1/tools/syringe2.png';
 
-  tool: IToolData
-}
+const SyringeData:IToolData = {
+  name: 'syringe',
+  image: '',
+  area: 'ass',
+  type: 'penetrator',
+  depthLimit: 50,
+  angle: -41,
+  map: [
+    [70, 0], [65, 2], [64, 47],
+  ],
+};
 
-const PenetratingTool = ({ initialPosition, tool }:IDraggableToolProps):JSX.Element => {
+const Syringe = ():JSX.Element => {
   const { scale } = useWindowDimensions();
   const ref = useRef<HTMLImageElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [isFilled, setIsFilled] = useState(true);
   const [pos, setPos] = useState({
     x: 0,
     y: 0,
   });
 
+  const { addEnema } = useAss();
+
   const [silhouetteMap, setSilhouetteMap] = useState<number[]>([]);
 
-  const { penetrateAss, setChokingLevel } = useSlave();
+  const { setChokingLevel } = useSlave();
+  const { penetrateAss } = useAss();
 
   function generateSilhouetteMap() {
     const expandedMap = [0];
 
-    if (tool.map.length > 0) {
-      const centerX = tool.map[0][0];
+    if (SyringeData.map.length > 0) {
+      const centerX = SyringeData.map[0][0];
 
-      let lastPoint = tool.map[0];
-      tool.map.forEach((point) => {
+      let lastPoint = SyringeData.map[0];
+      SyringeData.map.forEach((point) => {
         if (point !== lastPoint) {
           const diff = [point[0] - lastPoint[0], point[1] - lastPoint[1]];
           const linear = diff[0] / diff[1];
@@ -55,10 +69,10 @@ const PenetratingTool = ({ initialPosition, tool }:IDraggableToolProps):JSX.Elem
     setSilhouetteMap(expandedMap);
   }
   function strangle(depth:number) {
-    setChokingLevel(depth / tool.depthLimit);
+    setChokingLevel(depth / SyringeData.depthLimit);
   }
   function penetrate(depth:number) {
-    if (tool.name === 'strangle') {
+    if (SyringeData.name === 'strangle') {
       strangle(depth);
     } else {
       let stretch = 0;
@@ -73,20 +87,30 @@ const PenetratingTool = ({ initialPosition, tool }:IDraggableToolProps):JSX.Elem
   }
 
   function removeTool() {
-    console.log(`remove${tool}`);
+    console.log(`remove${SyringeData}`);
     penetrate(0);
+  }
+
+  function handleClick() {
+    if (pos.y < 0) {
+      if (isFilled) {
+        addEnema(1);
+      }
+      setIsFilled(!isFilled);
+    }
   }
 
   useEffect(() => {
     penetrate(0);
     generateSilhouetteMap();
-  }, [tool]);
+  }, [SyringeData]);
 
   useEffect(() => {
     console.log('create');
     return () => { removeTool(); };
   }, []);
 
+  const initialPosition = { x: 753, y: 647 };
   function onMouseMove(e:any) {
     if (!isDragging) return;
 
@@ -95,11 +119,11 @@ const PenetratingTool = ({ initialPosition, tool }:IDraggableToolProps):JSX.Elem
         x: pos.x,
         y: ref.current.offsetTop + e.movementY / scale,
       };
-      if (newPosition.y > tool.depthLimit) {
-        newPosition.y = tool.depthLimit;
+      if (newPosition.y > SyringeData.depthLimit) {
+        newPosition.y = SyringeData.depthLimit;
       }
-      if (newPosition.y < -tool.depthLimit) {
-        newPosition.y = -tool.depthLimit;
+      if (newPosition.y < -SyringeData.depthLimit) {
+        newPosition.y = -SyringeData.depthLimit;
       }
 
       penetrate(newPosition.y < 0 ? -newPosition.y : 0);
@@ -170,13 +194,26 @@ const PenetratingTool = ({ initialPosition, tool }:IDraggableToolProps):JSX.Elem
         position: 'absolute',
         left: initialPosition.x,
         top: initialPosition.y,
-        transform: `rotate(${tool.angle}deg)`,
+        transform: `rotate(${SyringeData.angle}deg)`,
 
       }}
     >
       <img
+        onClick={() => handleClick()}
+        className="internalSyringe"
+        src={syringeImgInt}
+        alt=""
+        style={{
+          position: 'absolute',
+          left: pos.x,
+          top: pos.y,
+          transform: `translateY(${isFilled ? 160 : 0}px)`,
+          transition: 'transform 0.3s ease-in-out',
+        }}
+      />
+      <img
         ref={ref}
-        src={tool.image}
+        src={syringeImgExt}
         alt=""
         style={{
           position: 'absolute',
@@ -185,8 +222,9 @@ const PenetratingTool = ({ initialPosition, tool }:IDraggableToolProps):JSX.Elem
           touchAction: 'none',
         }}
       />
+
     </Container>
   );
 };
 
-export default PenetratingTool;
+export default Syringe;
