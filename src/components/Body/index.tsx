@@ -6,6 +6,7 @@ import Ass from '../Ass';
 
 import Torax from '../Torax';
 import Squirt from '../Squirt';
+import Belly from '../Belly';
 
 // eslint-disable-next-line no-unused-vars
 
@@ -16,6 +17,7 @@ const Body = ():JSX.Element => (
     <Squirt />
     <Head />
     <Ass />
+    <Belly />
   </Container>
 );
 
