@@ -76,7 +76,9 @@ const PenetratingTool = ({ initialPosition, tool }:IDraggableToolProps):JSX.Elem
 
   function removeTool() {
     console.log(`remove${tool}`);
-    penetrate(0);
+    if (pos.y < 0) {
+      penetrate(0);
+    }
   }
 
   useEffect(() => {
