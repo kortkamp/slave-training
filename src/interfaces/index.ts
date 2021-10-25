@@ -5,10 +5,6 @@ interface ISlaveStatus {
   energy:number;
   oxygen:number;
   health: number;
-  ass:{
-    stretch: number,
-    depth: number,
-  }
 }
 
 export default ISlaveStatus;
