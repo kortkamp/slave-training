@@ -8,6 +8,7 @@ import { Container } from './styles';
 
 import { useWindowDimensions } from '../../../hooks/useWindowDimensions';
 import { IToolData } from '../../../tools';
+import { useSlave } from '../../../hooks/useSlave';
 
 interface IDraggableToolProps {
   initialPosition: {
@@ -23,14 +24,15 @@ const ElasticTool = ({ initialPosition, tool, action }:IDraggableToolProps):JSX.
   const { scale } = useWindowDimensions();
   const ref = useRef<HTMLImageElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const { hurt } = useSlave();
   const [pos, setPos] = useState({
     x: 0,
     y: 0,
   });
 
   function executeAction(value: number) {
-    console.log(value);
     action(value);
+    hurt(value);
   }
 
   function onMouseMove(e:any) {
