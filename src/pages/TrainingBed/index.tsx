@@ -9,13 +9,13 @@ import backgroundImg from '../../assets/bgimage/H/Hx1_0.jpg';
 
 import ToolsBox from '../../components/ToolsBox';
 
-import { useMousePosition } from '../../hooks/useMousePosition';
+// import { useMousePosition } from '../../hooks/useMousePosition';
 
 const MainRoom = ():JSX.Element => {
   const history = useHistory();
 
   console.log('oh my god rendered room');
-  const { mousePosition } = useMousePosition();
+  // const { mousePosition } = useMousePosition();
   return (
     <Container>
 
@@ -28,7 +28,8 @@ const MainRoom = ():JSX.Element => {
       <button type="button">Tools</button>
 
       <ToolsBox />
-      <span>{`${mousePosition.x} ${mousePosition.y}`}</span>
+      {/* <span>{`${mousePosition.x} ${mousePosition.y}`}</span> */}
+
     </Container>
   );
 };
