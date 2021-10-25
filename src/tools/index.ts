@@ -121,5 +121,4 @@ const Balls:IToolData = {
   ],
 };
 
-// TODO: add choking hand as a pentrable tool
 export const Tools = [Penis, Plug, Balls, Fist, Strangle, Finger, Dildo, Syringe];
