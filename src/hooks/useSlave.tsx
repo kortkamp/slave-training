@@ -9,6 +9,8 @@ import ISlaveStatus from '../interfaces';
 import { useEmotion } from './useEmotion';
 import { useAss } from './useAss';
 
+import Default from '../data/DefaultStats';
+
 interface ISlaveProviderProps {
   children: ReactNode;
 }
@@ -35,90 +37,23 @@ export const SlaveContext = createContext<ISlaveContextData>(
 
 // ms
 const updateInterval = 50;
+const updateFrequecy = 1000 / updateInterval;
 const updateBodyInterval = 1000;
 
 export function SlaveProvider({ children }:ISlaveProviderProps) {
   // ====== those should be persistent ============
-  const [status, setStatus] = useState({
-    lust: 0,
-    pain: 0,
-    fear: 0,
-    energy: 100,
-    oxygen: 100,
-    health: 100,
-    ass: {
-      stretch: 0,
-      depth: 0,
-    },
-
-  });
-
-  const [resistence, setResistence] = useState({
-    lust: 0.1,
-    pain: 0.1,
-    fear: 0,
-    energy: 0,
-    oxygen: 0,
-    health: 0,
-    ass: {
-      stretch: 1,
-      depth: 0,
-    },
-  });
-
-  const [minimum, setMinimum] = useState({
-    lust: 0,
-    pain: 0,
-    fear: 0,
-    energy: 0,
-    oxygen: 0,
-    health: 0,
-    ass: {
-      stretch: 0,
-      depth: 0,
-    },
-  });
-
+  const [status, setStatus] = useState(Default.stats);
+  const [resistence, setResistence] = useState(Default.resistence);
   // eslint-disable-next-line no-unused-vars
-  const [preference, setPreference] = useState({
-    lust: 0,
-    pain: 0,
-    fear: 0,
-    energy: 0,
-    oxygen: 0.05,
-    health: 0,
-    ass: {
-      stretch: 0.05,
-      depth: 0.05,
-    },
-  });
-
-  // eslint-disable-next-line no-unused-vars
-  const [fear, setFear] = useState({
-    lust: 0,
-    pain: 0.03,
-    fear: 0,
-    energy: 0,
-    oxygen: 0,
-    health: 0,
-    ass: {
-      stretch: 0.05,
-      depth: 0.05,
-    },
-  });
+  const [preference, setPreference] = useState(Default.preference);
 
   // =========== those should be reseted after load or sleep ===========
 
   const [chokingLevel, setChokingLevel] = useState(0);
-
   const [squirtingLevel, setSquirtingLevel] = useState(0);
-
   const [orgasmLevel, setOrgasmLevel] = useState(0);
-
   const [orgasmProgress, setOrgasmProgress] = useState(0);
-
   const { buildExpression } = useEmotion();
-
   const ass = useAss();
 
   function doSquirt(level:number) {
@@ -136,50 +71,49 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
       setOrgasmProgress(0);
       console.log('end orgasm');
       setStatus((value) => {
-        const newultranewStatus = clone(value);
-        newultranewStatus.lust = 20;
-        return newultranewStatus;
+        const newValue = clone(value);
+        newValue.lust = 20;
+        return newValue;
       });
     }, newOrgasmLevel * 2000);
   }
 
   function updateStatus() {
-    const drift = {
-      lust: -0.2,
-      pain: -1,
-      fear: -0.02,
-      energy: 0.1,
-      oxygen: 0.5,
-      health: 0,
-    };
+    const { drift } = Default;
 
     if (status.health <= 0) { return; }
 
     const newStatus = { ...status };
     let newOrgasmProgress = orgasmProgress;
 
+    // get the most recent orgasm progress value
     setOrgasmProgress((value) => { newOrgasmProgress = value; return value; });
+
+    const isPassedOut = newStatus.energy <= 0 || newStatus.oxygen <= 0;
 
     // update pain
     const minimunPain = 100 - newStatus.health;
-    newStatus.pain += ass.getPain() / 20;
+    newStatus.pain += ass.getPain() / updateFrequecy;
+    newStatus.pain += chokingLevel * 1.5;
     if (newStatus.pain > minimunPain) {
       newStatus.pain += drift.pain;
     }
-    if (newStatus.pain < minimunPain) {
+    if (newStatus.pain < minimunPain && !isPassedOut) {
       newStatus.pain = minimunPain;
     }
 
     // update fear
-    if (newStatus.pain === 0 && newStatus.fear > 0) {
+    if (newStatus.fear > 0) {
       newStatus.fear += drift.fear;
     }
-    if (newStatus.fear <= 100) {
-      // newStatus.fear += chokingLevel * fear.oxygen;
-      newStatus.fear += newStatus.pain * fear.pain;
-    }
 
-    newStatus.pain += chokingLevel * 1.5;
+    const chokeDesireInfluence = ((10 * chokingLevel) * preference.oxygen)
+    / updateFrequecy;
+    const painDesireInfluence = (newStatus.pain * preference.pain) / updateFrequecy;
+
+    newStatus.fear -= (chokeDesireInfluence + painDesireInfluence);
+
+    if (newStatus.fear < 0) { newStatus.fear = 0; }
 
     // update oxygen
     if (newStatus.oxygen < 100) {
@@ -196,13 +130,16 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
 
     // update lust
 
-    newStatus.lust += newStatus.pain * preference.pain;
-    newStatus.lust += 10 * chokingLevel * preference.oxygen;
+    newStatus.lust += chokeDesireInfluence + painDesireInfluence;
 
     newStatus.lust += ass.getLust();
 
     if (newStatus.lust >= 0 && orgasmLevel === 0) {
       newStatus.lust -= 0.01 * (0.1 * newStatus.lust + newStatus.fear);
+    }
+
+    if (newStatus.lust < 0) {
+      newStatus.lust = 0;
     }
 
     // console.log(`${newStatus.lust >= 0} ${newStatus.lust} ${status.lust}`);
@@ -217,6 +154,10 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
     // update energy
     newStatus.energy -= 0.001 * newStatus.pain * (1 - resistence.pain);
     newStatus.energy -= 0.001 * newStatus.lust * (1 - resistence.lust);
+
+    if (newStatus.health < newStatus.energy) {
+      newStatus.energy = newStatus.health;
+    }
 
     // do squirt
     if (squirtingLevel === 0) {
@@ -233,8 +174,6 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
 
     setOrgasmProgress(newOrgasmProgress);
     setStatus(newStatus);
-
-    const isPassedOut = newStatus.energy <= 0 || newStatus.oxygen <= 0;
 
     if (isPassedOut) {
       newStatus.lust = 0;
@@ -274,6 +213,7 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
     setStatus((currentStatus) => {
       const newValue = clone(currentStatus);
       newValue.pain += value;
+      newValue.health -= 0.1 * value;
       return newValue;
     });
   }
