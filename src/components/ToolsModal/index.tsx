@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+
+// TODO create a generic tool to work with all types. [DRY]
 import Modal from 'react-modal';
 import { useState } from 'react';
 import { ActiveTools, Container } from './styles';
@@ -8,6 +10,7 @@ import closeImg from '../../assets/close.svg';
 import { IToolData, Tools } from '../../tools';
 import PenetratingTool from '../tools/PenetratingTool';
 import ElasticTool from '../tools/ElasticTool';
+import Syringe from '../tools/Syringe';
 
 interface IToolsModalProps {
   isOpen: boolean;
@@ -79,7 +82,7 @@ const ToolsModal = ({
           </div>
         </Container>
       </Modal>
-      <ActiveTools key="asd" style={{ zIndex: 1030 }}>
+      <ActiveTools style={{ zIndex: 1030 }}>
         {selectedTools.map((tool) => {
           if (tool?.type === 'elastic') {
             return (
@@ -95,9 +98,14 @@ const ToolsModal = ({
         })}
 
       </ActiveTools>
-      <ActiveTools key="334243" style={{ zIndex: 1005 }}>
+      <ActiveTools style={{ zIndex: 1005 }}>
         {selectedTools.map((tool) => {
           if (tool?.type === 'penetrator') {
+            if (tool.name === 'syringe') {
+              return (
+                <Syringe key="syringe" />
+              );
+            }
             return (
               <PenetratingTool
                 key={tool.name}
