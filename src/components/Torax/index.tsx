@@ -37,7 +37,6 @@ const Torax = ():JSX.Element => {
   }, []);
 
   // TODO improve performance to not render unnecessarily
-  // TODO when choked till health zero torax dont stop
 
   return (
     <Container>
