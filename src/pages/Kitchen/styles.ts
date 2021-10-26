@@ -2,7 +2,11 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   
-  
+  button {
+    width: 100px;
+    height: 70px;
+    font-size: 50px;
+  }
   position: relative;
   width:fit-content;
 
@@ -14,4 +18,13 @@ export const Container = styled.div`
       position:static;
     }
   }
+`;
+
+export const Scene = styled.div`
+  position:absolute;
+  top:-50px;
+  left:0;
+  
+  transform: rotate(16deg);
+  
 `;
