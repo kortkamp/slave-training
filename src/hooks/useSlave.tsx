@@ -4,7 +4,7 @@ import React, {
 } from 'react';
 import clone from 'clone-deep';
 import useInterval from './useInterval';
-import ISlaveStatus from '../interfaces';
+import { ISlaveStatus } from '../interfaces';
 
 import { useEmotion } from './useEmotion';
 import { useAss } from './useAss';

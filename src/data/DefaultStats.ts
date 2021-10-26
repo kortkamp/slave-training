@@ -3,6 +3,7 @@ const stats = {
   pain: 0,
   fear: 0,
   energy: 100,
+  nutrition: 100,
   oxygen: 100,
   health: 100,
 };
@@ -12,6 +13,7 @@ const resistence = {
   pain: 0.1,
   fear: 0,
   energy: 0,
+  nutrition: 0,
   oxygen: 0,
   health: 0,
 
@@ -23,6 +25,7 @@ const preference = {
   pain: -0.1,
   fear: -1,
   energy: 0,
+  nutrition: 0,
   oxygen: -0.3,
   health: 0,
 };
@@ -33,6 +36,7 @@ const drift = {
   pain: -1,
   fear: -0.02,
   energy: 0.1,
+  nutrition: 0,
   oxygen: 0.5,
   health: 0,
 };

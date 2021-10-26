@@ -6,7 +6,7 @@ import deepEqual from 'deep-equal';
 
 import clone from 'clone-deep';
 import Expression from '../data/Expression.json';
-import ISlaveStatus from '../interfaces';
+import { ISlaveStatus } from '../interfaces';
 
 interface IEmotionProviderProps {
   children: ReactNode;
