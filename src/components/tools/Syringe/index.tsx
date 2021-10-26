@@ -12,7 +12,7 @@ import { Container } from './styles';
 
 import { useWindowDimensions } from '../../../hooks/useWindowDimensions';
 import { useSlave } from '../../../hooks/useSlave';
-import { IToolData } from '../../../tools';
+import { IToolData } from '../../../data/Tools';
 import { useAss } from '../../../hooks/useAss';
 
 import syringeImgExt from '../../../assets/fgimage/Hx1/tools/syringe0.png';
