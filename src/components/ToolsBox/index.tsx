@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { Container } from './styles';
 
 import toolImg from '../../assets/tools.svg';
@@ -9,11 +9,18 @@ import medicineImg from '../../assets/medicine.svg';
 import ToolsModal from '../ToolsModal';
 import LocationsModal from '../LocationsModal';
 
-const ToolsBox = ():JSX.Element => {
+interface IToolBoxProps {
+  // eslint-disable-next-line react/require-default-props
+  children?: ReactNode|undefined;
+}
+
+const ToolsBox = ({ children = undefined }:IToolBoxProps):JSX.Element => {
   const [isToolsModalOpen, setIsToolsModalOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationsModalOpen] = useState(false);
+
   return (
     <Container>
+      {children}
       <button type="button" onClick={() => setIsLocationsModalOpen(true)}>
         <img src={homeImg} alt="Locations" />
       </button>
