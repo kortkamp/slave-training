@@ -1,6 +1,8 @@
 import Modal from 'react-modal';
 import { Container } from './styles';
-import closeImg from '../../assets/close.svg';
+import closeImg from '../../assets/right-arrow.svg';
+
+import breadImg from '../../assets/fgimage/o/food/bread.png';
 
 interface IToolsModalProps {
   isOpen: boolean;
@@ -31,7 +33,9 @@ const FoodModal = ({ isOpen, onRequestClose, addFood }: IToolsModalProps):JSX.El
       <Container>
         <span className="title">FOOD</span>
         <div className="content">
-          <button type="button" onClick={() => handleAddFood(1)}>Bread</button>
+          <button type="button" onClick={() => handleAddFood(1)}>
+            <img src={breadImg} alt="" />
+          </button>
         </div>
       </Container>
     </Modal>

@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { ActiveTools, Container } from './styles';
 import closeImg from '../../assets/close.svg';
 
-import { IToolData, Tools } from '../../tools';
+import { IToolData, Tools } from '../../data/Tools';
 import PenetratingTool from '../tools/PenetratingTool';
 import ElasticTool from '../tools/ElasticTool';
 import Syringe from '../tools/Syringe';

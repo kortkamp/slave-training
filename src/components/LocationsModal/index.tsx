@@ -1,7 +1,7 @@
 import Modal from 'react-modal';
 import { useHistory } from 'react-router-dom';
 import { Container } from './styles';
-import closeImg from '../../assets/close.svg';
+import closeImg from '../../assets/right-arrow.svg';
 
 interface IToolsModalProps {
   isOpen: boolean;

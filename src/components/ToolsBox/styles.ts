@@ -10,6 +10,7 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 20px;
   padding:10px;
+  /* z-index: var(--tool-box-z-index); */
 
   button {
     & > img {

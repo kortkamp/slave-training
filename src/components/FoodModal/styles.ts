@@ -7,6 +7,7 @@ export const Container = styled.div`
   justify-content:center;
   align-items:center;
   
+  
   .title {
     font: 35px sans-serif;
     font-weight : 600;

@@ -27,6 +27,12 @@ const StatusBox = ():JSX.Element => {
     setStatus(updatedStatus);
   }
 
+  function setNutrition(value:number) {
+    const updatedStatus = { ...status };
+    updatedStatus.nutrition = value;
+    setStatus(updatedStatus);
+  }
+
   function setOxygen(value:number) {
     const updatedStatus = { ...status };
     updatedStatus.oxygen = value;
@@ -48,6 +54,7 @@ const StatusBox = ():JSX.Element => {
         <Slider name="Pain" value={status.pain} setValue={(value) => setPain(value)} />
         <Slider name="Fear" value={status.fear} setValue={(value) => setFear(value)} />
         <Slider name="Energy" value={status.energy} setValue={(value) => setEnergy(value)} />
+        <Slider name="Nutrition" value={status.nutrition} setValue={(value) => setNutrition(value)} />
         <Slider name="Oxygen" value={status.oxygen} setValue={(value) => setOxygen(value)} />
         <Slider name="Health" value={status.health} setValue={(value) => setHealth(value)} />
       </div>
