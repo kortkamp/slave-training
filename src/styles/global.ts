@@ -27,6 +27,9 @@ export const GlobalStyle = createGlobalStyle<IGlobalProps>`
 
     // z-index list
     --tool-z-index:1005;
+
+    --modal-z-index: 2000;
+    --tool-box-z-index: 2100;
     
   }
   * {
@@ -81,7 +84,7 @@ export const GlobalStyle = createGlobalStyle<IGlobalProps>`
   }
 
   .react-modal-overlay {
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.0);
     position:fixed;
     top:0;
     bottom:0;
@@ -90,26 +93,47 @@ export const GlobalStyle = createGlobalStyle<IGlobalProps>`
     display:flex;
     align-items:center;
     justify-content: center;
-    z-index: 9999;
+    z-index: var(--modal-z-index);
   }
   .react-modal-content {
-    width: 100%;
+    min-width: 400px;
     max-width: fit-content;
-    background: var(--background);
+    background:rgba(240,240,240,.8);
     padding: 3rem;
-    position: relative;
+    position: absolute;
+    right: 0;
+    top: 0;
+    min-height: 500px;
     border-radius: 0.25rem;
   }
   .react-modal-close {
+    width: 30px;
     position:absolute;
     right: 1.5rem;
     top: 1.5rem;
     border: 0;
     background: transparent;
-    transition: filter 0.2s;
+    opacity: 0.5;
+    transition: opacity 0.2s;
     &:hover {
-      filter: brightness(0.7);
+      opacity: 1;
     }
+  }
+
+  .ReactModal__Overlay {
+    opacity: 1;
+    transform: translateX(500px);
+    transition: all 200ms ease-in-out;
+  }
+
+  .ReactModal__Overlay--after-open {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+
+  .ReactModal__Overlay--before-close {
+    opacity: 1;
+    transform: translateX(500px);
   }
   
 `;
