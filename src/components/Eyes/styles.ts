@@ -14,9 +14,9 @@ interface IPupilsProps2 {
 export const Container = styled.div<IPupilsProps2>`
   z-index: 1021;
   position:absolute;
-  width:130px;
+  width:125px;
   height:40px;
-  left:308px;
+  left:310px;
   top:188px;
   display:flex;
   justify-content:space-between;
