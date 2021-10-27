@@ -20,16 +20,17 @@ export const Container = styled.div`
     align-items:center;
     
 
-    & > div {
-      border: 1px solid red;
+    & > button {
+      border: 2px solid red;
       cursor: pointer;
-      height: 200px;
+      height: 100px;
       width: 100px;
       display: flex;
       align-items:center;
       justify-content:center;
       border-radius: 20px;
       margin: 10px;
+      font-size: 20px;
       img {
         height: 200px;
       }

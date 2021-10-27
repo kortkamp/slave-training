@@ -29,6 +29,8 @@ const LocationsModal = ({ isOpen, onRequestClose }: IToolsModalProps):JSX.Elemen
         <div className="content">
           <button type="button" onClick={() => history.push('/')}>Training Room</button>
           <button type="button" onClick={() => history.push('/hang')}>Hanging Room</button>
+          <button type="button" onClick={() => history.push('/kitchen')}>Kitchen</button>
+          <button type="button" onClick={() => history.push('/bedroom')}>Bedroom</button>
         </div>
       </Container>
     </Modal>
