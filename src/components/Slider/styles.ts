@@ -1,6 +1,33 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 40px;
+
+  font-size: 15px;
+
+  color: white;
+
+  & > span {
+    transform: translateY(21px);
+  }
+
+  & > div {
+    display: flex;
+    span {
+      transform: rotate(90deg);
+      width: 40px;
+      height: 20px;
+      text-align: center;
+      margin-right: 5px;
+      background: rgba(4,4,4,0.5);
+      border-radius: 10px;
+    }
+  }
   input {
     -webkit-appearance: none;  /* Override default CSS styles */
     appearance: none;
@@ -9,9 +36,9 @@ export const Container = styled.div`
     background: #444; /* Grey background */
     border-radius: 10px;
     outline: none; /* Remove outline */
-    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
-    transition: opacity .2s;
+    opacity: 0.5; /* Set transparency (for mouse-over effects on hover) */
+   
+    /* transition: all ease-in-out 1.5s; */
   
   
     &::-webkit-slider-thumb {

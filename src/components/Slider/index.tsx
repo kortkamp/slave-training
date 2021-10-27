@@ -10,14 +10,18 @@ interface ISLiderProps {
 const Slider = ({ name, value, setValue }:ISLiderProps):JSX.Element => (
   <Container>
     <span>{name}</span>
-    <input
-      type="range"
-      min="0"
-      max="100"
-      step="0.5"
-      value={value}
-      onChange={(event) => setValue(Number(event.target.value))}
-    />
+    <div>
+      <span>{Math.round(value)}</span>
+      <input
+        type="range"
+        min="0"
+        max="100"
+        step="0.5"
+        value={value}
+        onChange={(event) => setValue(Number(event.target.value))}
+      />
+
+    </div>
   </Container>
 );
 
