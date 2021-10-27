@@ -35,8 +35,8 @@ const drift = {
   lust: -0.2,
   pain: -1,
   fear: -0.02,
-  energy: 0.1,
-  nutrition: 0,
+  energy: -0.01,
+  nutrition: -0.01,
   oxygen: 0.5,
   health: 0,
 };
