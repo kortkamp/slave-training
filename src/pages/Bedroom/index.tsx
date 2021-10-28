@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { useState } from 'react';
 import { Container } from './styles';
 
 import Head from '../../components/Head';
@@ -6,6 +7,7 @@ import Head from '../../components/Head';
 import StatusBox from '../../components/StatusBox';
 
 import backgroundImg from '../../assets/bgimage/bg/bed.jpg';
+import lyingImg from '../../assets/bgimage/bg/lying_bed.png';
 
 import bodyImg from '../../assets/fgimage/s/body/stn_b.png';
 import headImg from '../../assets/fgimage/s/body/stn_h1.png';
@@ -21,25 +23,28 @@ import ToolsBox from '../../components/ToolsBox';
 
 const Bedroom = ():JSX.Element => {
   const { sleep, load, status } = useSlave();
+  const [isLiingOn, setIsLiingOn] = useState(true);
   return (
     <Container>
 
       <img className="background" src={backgroundImg} alt="" />
-      <img src={bodyImg} alt="" />
 
-      {/* <img src={headImg} alt="" />
-      <img src={eyeImg} alt="" />
-      <img src={mouthImg} alt="" /> */}
-      <div className="headContainer">
-        <Head />
-      </div>
+      {isLiingOn
+        ? <img src={lyingImg} alt="" />
+        : (
+          <>
+            <img src={bodyImg} alt="" />
+            <div className="headContainer">
+              <Head />
+            </div>
+            <img src={hairImg} alt="" />
+            <img src={dressImg} alt="" />
+            <img src={armsImg} alt="" />
+          </>
+        )}
 
-      <img src={hairImg} alt="" />
-      <img src={dressImg} alt="" />
-      <img src={armsImg} alt="" />
-
-      <button type="button" onClick={() => sleep()}>SLEEP</button>
-      <button type="button" onClick={() => load()}>LOAD</button>
+      <button type="button" onClick={() => { if (isLiingOn) sleep(); }}>SLEEP</button>
+      <button type="button" onClick={() => setIsLiingOn(!isLiingOn)}>LIE DOWN</button>
       <StatusBox />
       <ToolsBox />
     </Container>

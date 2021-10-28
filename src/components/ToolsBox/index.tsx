@@ -6,6 +6,7 @@ import settingsImg from '../../assets/settings.svg';
 import slaveImg from '../../assets/slave.svg';
 import medicineImg from '../../assets/medicine.svg';
 import LocationsModal from '../LocationsModal';
+import SlaveModal from '../SlaveModal';
 
 interface IToolBoxProps {
   // eslint-disable-next-line react/require-default-props
@@ -14,6 +15,7 @@ interface IToolBoxProps {
 
 const ToolsBox = ({ children = undefined }:IToolBoxProps):JSX.Element => {
   const [isLocationModalOpen, setIsLocationsModalOpen] = useState(false);
+  const [isSlaveModalOpen, setIsSlaveModalOpen] = useState(false);
 
   return (
     <Container>
@@ -22,7 +24,7 @@ const ToolsBox = ({ children = undefined }:IToolBoxProps):JSX.Element => {
         <img src={homeImg} alt="Locations" />
       </button>
 
-      <button type="button">
+      <button type="button" onClick={() => setIsSlaveModalOpen(true)}>
         <img src={slaveImg} alt="Slave" />
       </button>
       <button type="button">
@@ -36,6 +38,11 @@ const ToolsBox = ({ children = undefined }:IToolBoxProps):JSX.Element => {
         isOpen={isLocationModalOpen}
         onRequestClose={() => setIsLocationsModalOpen(false)}
       />
+      <SlaveModal
+        isOpen={isSlaveModalOpen}
+        onRequestClose={() => setIsSlaveModalOpen(false)}
+      />
+
     </Container>
   );
 };

@@ -271,15 +271,17 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
       return newValue;
     });
   }
+  // 8 hours of sleep must fill 100% energy and costs 30% nutrition
   function sleep() {
-    const storedData = {
-      status,
-      preference,
-      resistence,
-    };
-    api.Save('status', status);
+    const ammount = 2;
+    const updatedStatus = { ...status };
+    updatedStatus.lust = 0;
+    updatedStatus.energy += ammount * 12.5;
+    updatedStatus.nutrition -= 5 * ammount;
+    api.Save('status', updatedStatus);
     api.Save('resistence', resistence);
     api.Save('preference', preference);
+    setStatus(updatedStatus);
     // save status
     // save preference
     // save resistence

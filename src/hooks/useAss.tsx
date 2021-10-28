@@ -56,7 +56,6 @@ export function AssProvider({ children }:IAssProviderProps) {
   // =========== those should be saved after load or sleep ===========
 
   const [enemaCapacity, setEnemaCapacity] = useState(0);
-  // eslint-disable-next-line no-unused-vars
   const [maxStretch, setMaxStretch] = useState(0);
 
   function tryExpelEnema(force?:boolean) {
