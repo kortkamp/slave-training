@@ -3,46 +3,47 @@ import { Container } from './styles';
 import { useSlave } from '../../hooks/useSlave';
 
 const StatusBox = ():JSX.Element => {
-  const { status, orgasmProgress, setStatus } = useSlave();
+  const { status, orgasmProgress, dispatchStatus } = useSlave();
 
   function setLust(value:number) {
     const updatedStatus = { ...status };
     updatedStatus.lust = value;
-    setStatus(updatedStatus);
+
+    dispatchStatus({ type: 'set', state: updatedStatus });
   }
   function setPain(value:number) {
     const updatedStatus = { ...status };
     updatedStatus.pain = value;
-    setStatus(updatedStatus);
+    dispatchStatus({ type: 'set', state: updatedStatus });
   }
   function setFear(value:number) {
     const updatedStatus = { ...status };
     updatedStatus.fear = value;
-    setStatus(updatedStatus);
+    dispatchStatus({ type: 'set', state: updatedStatus });
   }
 
   function setEnergy(value:number) {
     const updatedStatus = { ...status };
     updatedStatus.energy = value;
-    setStatus(updatedStatus);
+    dispatchStatus({ type: 'set', state: updatedStatus });
   }
 
   function setNutrition(value:number) {
     const updatedStatus = { ...status };
     updatedStatus.nutrition = value;
-    setStatus(updatedStatus);
+    dispatchStatus({ type: 'set', state: updatedStatus });
   }
 
   function setOxygen(value:number) {
     const updatedStatus = { ...status };
     updatedStatus.oxygen = value;
-    setStatus(updatedStatus);
+    dispatchStatus({ type: 'set', state: updatedStatus });
   }
 
   function setHealth(value:number) {
     const updatedStatus = { ...status };
     updatedStatus.health = value;
-    setStatus(updatedStatus);
+    dispatchStatus({ type: 'set', state: updatedStatus });
   }
 
   return (

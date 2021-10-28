@@ -1,4 +1,16 @@
-const stats = {
+// its mandatory that all fields are pŕimitives
+
+const cleared = {
+  lust: 0,
+  pain: 0,
+  fear: 0,
+  energy: 0,
+  nutrition: 0,
+  oxygen: 0,
+  health: 0,
+};
+
+const status = {
   lust: 0,
   pain: 0,
   fear: 0,
@@ -26,7 +38,7 @@ const preference = {
   fear: -1,
   energy: 0,
   nutrition: 0,
-  oxygen: -0.3,
+  oxygen: 0.3,
   health: 0,
 };
 
@@ -42,5 +54,5 @@ const drift = {
 };
 
 export default {
-  stats, resistence, preference, drift,
+  cleared, status, resistence, preference, drift,
 };
