@@ -1,4 +1,5 @@
 export interface ISlaveStatus {
+  orgasm: number;
   lust:number;
   pain:number;
   fear:number;

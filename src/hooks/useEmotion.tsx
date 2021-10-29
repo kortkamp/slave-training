@@ -128,7 +128,7 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
     }
   }
 
-  console.log('render emotion');
+  // console.log('render emotion');
 
   return (
     <EmotionContext.Provider value={{

@@ -15,7 +15,7 @@ const Slider = ({ name, value, setValue }:ISLiderProps):JSX.Element => (
       <input
         type="range"
         min="0"
-        max="100"
+        max="120"
         step="0.5"
         value={value}
         onChange={(event) => setValue(Number(event.target.value))}

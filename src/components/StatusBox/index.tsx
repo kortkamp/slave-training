@@ -3,7 +3,14 @@ import { Container } from './styles';
 import { useSlave } from '../../hooks/useSlave';
 
 const StatusBox = ():JSX.Element => {
-  const { status, orgasmProgress, dispatchStatus } = useSlave();
+  const { status, dispatchStatus } = useSlave();
+
+  function setOrgasm(value:number) {
+    const updatedStatus = { ...status };
+    updatedStatus.orgasm = value;
+
+    dispatchStatus({ type: 'set', state: updatedStatus });
+  }
 
   function setLust(value:number) {
     const updatedStatus = { ...status };
@@ -50,7 +57,7 @@ const StatusBox = ():JSX.Element => {
     <Container>
       <span>Status</span>
       <div>
-        <Slider name="Orgasm" value={orgasmProgress} setValue={() => {}} />
+        <Slider name="Orgasm" value={status.orgasm} setValue={(value) => { setOrgasm(value); }} />
         <Slider name="Lust" value={status.lust} setValue={(value) => setLust(value)} />
         <Slider name="Pain" value={status.pain} setValue={(value) => setPain(value)} />
         <Slider name="Fear" value={status.fear} setValue={(value) => setFear(value)} />

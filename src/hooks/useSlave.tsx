@@ -25,7 +25,6 @@ interface ISlaveContextData {
   eat: (food:IFood) => void;
   squirtingLevel: number;
   orgasmLevel: number;
-  orgasmProgress: number;
   chokingLevel: number;
   // eslint-disable-next-line no-unused-vars
   setChokingLevel: (value:number) => void;
@@ -51,6 +50,7 @@ interface IReducerStatusAction {
 }
 function addStatus(status1:ISlaveStatus, status2:ISlaveStatus) {
   return {
+    orgasm: status1.orgasm + status2.orgasm,
     lust: status1.lust + status2.lust,
     pain: status1.pain + status2.pain,
     fear: status1.fear + status2.fear,
@@ -61,25 +61,11 @@ function addStatus(status1:ISlaveStatus, status2:ISlaveStatus) {
   };
 }
 
-function updateStatusFromPreferences(
-  currentStatus:ISlaveStatus,
-  currentPreferences: ISlaveStatus,
-) {
-  // const chokeDesireInfluence = ((10 * chokingLevel) * currentPreferences.oxygen)
-  // / updateFrequecy;
-  const painDesireInfluence = (currentStatus.pain * currentPreferences.pain) / updateFrequecy;
-
-  // update fear
-  const fear = -painDesireInfluence;
-  // update oxygen
-  const lust = painDesireInfluence;
-  return ({
-    ...Default.cleared, lust, fear,
-  });
-}
-
 function update(status:ISlaveStatus, preference:ISlaveStatus, resistence: ISlaveStatus) {
   // update drifts
+  if (status.health <= 0) {
+    return status;
+  }
   const newStatus = addStatus(Default.drift, status);
 
   const drainFromPain = 0.001 * status.pain * (1 - resistence.pain);
@@ -108,7 +94,10 @@ function update(status:ISlaveStatus, preference:ISlaveStatus, resistence: ISlave
 
   newStatus.lust -= 0.01 * (0.1 * newStatus.lust + newStatus.fear);
 
+  newStatus.orgasm += (newStatus.lust - status.lust);
+
   // check minimums
+  if (newStatus.orgasm < 0) { newStatus.orgasm = 0; }
   if (newStatus.lust < 0) { newStatus.lust = 0; }
   if (newStatus.pain < 0) { newStatus.pain = 0; }
   if (newStatus.fear < 0) { newStatus.fear = 0; }
@@ -133,7 +122,10 @@ function reducerStatus(state:ISlaveStatus, action:IReducerStatusAction) {
     case 'set':
       return action.state;
     case 'add':
-      return addStatus(state, action.state);
+      return addStatus(
+        state,
+        { ...action.state, orgasm: action.state.lust + action.state.orgasm },
+      );
     case 'update':
       if (action.preference && action.resistence) {
         return update(state, action.preference, action.resistence);
@@ -162,7 +154,6 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
   const [chokingLevel, setChokingLevel] = useState(0);
   const [squirtingLevel, setSquirtingLevel] = useState(0);
   const [orgasmLevel, setOrgasmLevel] = useState(0);
-  const [orgasmProgress, setOrgasmProgress] = useState(0);
   const { buildExpression } = useEmotion();
   const ass = useAss();
 
@@ -171,21 +162,19 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
     setTimeout(() => { setSquirtingLevel(0); }, 1000);
   }
 
-  function doOrgasm() {
-    const newOrgasmLevel = 1 + Math.round((status.lust - 100) / 20);
-    setOrgasmLevel(newOrgasmLevel);
-    setOrgasmProgress(0);
-    console.log('start orgasm');
-    setTimeout(() => {
-      setOrgasmLevel(0);
-      setOrgasmProgress(0);
-      console.log('end orgasm');
+  function endOrgasm() {
+    setOrgasmLevel(0);
+    dispatchStatus({ type: 'add', state: { ...Default.cleared, lust: -60, orgasm: -1000 } });
+  }
 
-      // setStatus((value) => {
-      //   const newValue = clone(value);
-      //   newValue.lust = 20;
-      //   return newValue;
-      // });
+  function doOrgasm() {
+    let newOrgasmLevel = 1 + Math.round((status.lust - 100) / 20);
+    if (newOrgasmLevel < 1) {
+      newOrgasmLevel = 1;
+    }
+    setOrgasmLevel(newOrgasmLevel);
+    setTimeout(() => {
+      endOrgasm();
     }, newOrgasmLevel * 2000);
   }
 
@@ -214,18 +203,6 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
 
   function updateBodyReaction() {
     const newStatus = { ...status };
-    const isPassedOut = newStatus.energy <= 0 || newStatus.oxygen <= 0;
-
-    let newOrgasmProgress = orgasmProgress;
-    // get the most recent orgasm progress value
-    setOrgasmProgress((value) => { newOrgasmProgress = value; return value; });
-
-    // update pain
-
-    newOrgasmProgress += (newStatus.lust - status.lust - 0.01 * newOrgasmProgress);
-    if (newOrgasmProgress < 0) {
-      newOrgasmProgress = 0;
-    }
 
     // do squirt
     if (squirtingLevel === 0) {
@@ -236,21 +213,9 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
       }
     }
     // do orgasm
-    if (orgasmLevel === 0 && orgasmProgress > 100) {
+    // console.log(`orgasmLevel ${orgasmLevel}`);
+    if (orgasmLevel === 0 && status.orgasm > 100) {
       doOrgasm();
-    }
-
-    setOrgasmProgress(newOrgasmProgress);
-
-    if (isPassedOut) {
-      newStatus.lust = 0;
-      newStatus.pain = 0;
-      newStatus.fear = 0;
-      setOrgasmLevel(0);
-      setOrgasmProgress(0);
-    } else {
-      updatePreferences(newStatus);
-      buildExpression(newStatus);
     }
   }
 
@@ -291,17 +256,16 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
       type: 'update', state: status, preference, resistence,
     });
     dispatchStatus({ type: 'add', state: updateStatusFromBody() });
-    dispatchStatus({
-      type: 'add',
-      state: updateStatusFromPreferences(status, preference),
-    });
+
     updateBodyReaction();
+    updatePreferences(status);
+    buildExpression(status);
   }
 
   function hurt(value:number) {
     dispatchStatus({
       type: 'add',
-      state: { ...Default.cleared, pain: value, health: 0.1 * value },
+      state: { ...Default.cleared, pain: value, health: -0.1 * value },
     });
   }
 
@@ -343,7 +307,6 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
       eat,
       chokingLevel,
       orgasmLevel,
-      orgasmProgress,
       setChokingLevel,
       squirtingLevel,
       sleep,
