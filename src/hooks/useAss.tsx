@@ -1,5 +1,5 @@
 import React, {
-  createContext, useState, ReactNode, useContext,
+  createContext, useState, ReactNode, useContext, useReducer,
 } from 'react';
 import useInterval from './useInterval';
 
@@ -41,11 +41,31 @@ export const AssContext = createContext<IEmotionContextData>(
   {} as IEmotionContextData,
 );
 
+interface IReducerStateAction {
+  type: 'set'|'add'|'get';
+  state: number;
+}
+
+function reducerState(state:number, action:IReducerStateAction) {
+  switch (action.type) {
+    case 'set':
+      return action.state;
+    case 'add':
+      return state + action.state;
+    case 'get':
+      return state - action.state;
+    default:
+      throw new Error();
+  }
+}
+
 export function AssProvider({ children }:IAssProviderProps) {
   // =========== those should be reseted after load or sleep ===========
 
   // eslint-disable-next-line no-unused-vars
-  const [lust, setLust] = useState(0);
+  // const [, setLust] = useState(0);
+
+  const [lust, dispatchLust] = useReducer(reducerState, 0);
 
   const [depth, setDepth] = useState(0);
 
@@ -134,8 +154,9 @@ export function AssProvider({ children }:IAssProviderProps) {
     }
     if (penetration.depth > 0) {
       let lustIncrement = lustFromPenetration * Math.abs(penetration.depth - depth);
-      lustIncrement *= penetration.stretch;
-      setLust((value) => value + lustIncrement);
+      lustIncrement *= (10 + penetration.stretch);
+      // setLust((value) => value + lustIncrement);
+      dispatchLust({ type: 'add', state: lustIncrement });
     }
 
     setDepth(penetration.depth);
@@ -159,10 +180,14 @@ export function AssProvider({ children }:IAssProviderProps) {
   }
   function getLust() {
     let gotLust = enemaLevel * lustFromEnema;
-    setLust((value) => {
-      gotLust += value;
-      return 0;
-    });
+    // setLust((value) => {
+    //   gotLust += value;
+    //   return 0;
+    // });
+    if (lust > 0) {
+      gotLust += lust;
+      dispatchLust({ type: 'get', state: lust });
+    }
     return gotLust;
   }
 
