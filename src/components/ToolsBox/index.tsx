@@ -19,7 +19,7 @@ const ToolsBox = ({ children = undefined }:IToolBoxProps):JSX.Element => {
 
   return (
     <Container>
-      {children}
+
       <button type="button" onClick={() => setIsLocationsModalOpen(true)}>
         <img src={homeImg} alt="Locations" />
       </button>
@@ -27,6 +27,7 @@ const ToolsBox = ({ children = undefined }:IToolBoxProps):JSX.Element => {
       <button type="button" onClick={() => setIsSlaveModalOpen(true)}>
         <img src={slaveImg} alt="Slave" />
       </button>
+      {children}
       <button type="button">
         <img src={medicineImg} alt="Medicine" />
       </button>
