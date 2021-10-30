@@ -87,7 +87,6 @@
       "mouth": 2
     }
   },
-  
   "lust8": {
     "time": 0,
     "face": {
@@ -117,6 +116,61 @@
       "eyelip": 0,
       "pupilPosition": 4,
       "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 6
+    }
+  },
+  "lust11": {
+    "time": 0,
+    "face": {
+      "eyebrow": 1,
+      "eyelip": 0,
+      "pupilPosition": 4,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 5
+    }
+  },
+  "lust12": {
+    "time": 0,
+    "face": {
+      "eyebrow": 1,
+      "eyelip": 0,
+      "pupilPosition": 1,
+      "pupilRadius": 1,
+      "tear": 0,
+      "mouth": 7
+    }
+  },
+  "lust13": {
+    "time": 0,
+    "face": {
+      "eyebrow": 1,
+      "eyelip": 0,
+      "pupilPosition": 3,
+      "pupilRadius": 1,
+      "tear": 0,
+      "mouth": 5
+    }
+  },
+  "lust14": {
+    "time": 0,
+    "face": {
+      "eyebrow": 1,
+      "eyelip": 0,
+      "pupilPosition": 3,
+      "pupilRadius": 1,
+      "tear": 0,
+      "mouth": 7
+    }
+  },
+  "lust15": {
+    "time": 0,
+    "face": {
+      "eyebrow": 1,
+      "eyelip": 0,
+      "pupilPosition": 1,
+      "pupilRadius": 0,
       "tear": 0,
       "mouth": 6
     }
@@ -261,8 +315,52 @@
     "face": {
       "eyebrow": 0,
       "eyelip": 0,
-      "pupilPosition": 0,
+      "pupilPosition": 2,
+      "pupilRadius": 2,
+      "tear": 0,
+      "mouth": 5
+    }
+  },
+  "pain7": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 2,
+      "pupilRadius": 1,
+      "tear": 0,
+      "mouth": 7
+    }
+  },
+  "pain8": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 1,
+      "pupilRadius": 1,
+      "tear": 0,
+      "mouth": 5
+    }
+  },
+  "pain9": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 1,
       "pupilRadius": 0,
+      "tear": 0,
+      "mouth": 7
+    }
+  },
+  "pain10": {
+    "time": 0,
+    "face": {
+      "eyebrow": 0,
+      "eyelip": 0,
+      "pupilPosition": 3,
+      "pupilRadius": 1,
       "tear": 0,
       "mouth": 7
     }
@@ -321,6 +419,27 @@
       "tear": 0,
       "mouth": 7
     }
+  },
+  "passedout": {
+    "time": 0,
+    "face": {
+      "eyebrow": 1,
+      "eyelip": 0,
+      "pupilPosition": 4,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 8
+    }
+  },
+  "chokedout": {
+    "time": 0,
+    "face": {
+      "eyebrow": 1,
+      "eyelip": 0,
+      "pupilPosition": 4,
+      "pupilRadius": 3,
+      "tear": 0,
+      "mouth": 9
+    }
   }
-  
 }

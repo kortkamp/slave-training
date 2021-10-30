@@ -85,9 +85,9 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
 
     // pain expression
     let painLevel = Math.round(status.pain / 20);
-    if (painLevel > 6) {
-      painLevel = 6;
-    }
+    // if (painLevel > 10) {
+    //   painLevel = 10;
+    // }
 
     let lustLevel = Math.round(status.lust / 20);
     if (lustLevel > 10) {
@@ -98,19 +98,23 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
       newExpression = loadExpressionFromData(`fear${fearLevel}`);
     }
 
-    if (lustLevel > 0 && lustLevel <= 10) {
+    if (lustLevel > 0 && lustLevel <= 15) {
       newExpression = loadExpressionFromData(`lust${lustLevel}`);
     }
 
     painLevel -= lustLevel;
-    if (painLevel > 0 && painLevel <= 6) {
+    if (painLevel > 0 && painLevel <= 10) {
       newExpression = loadExpressionFromData(`pain${painLevel}`);
     }
 
-    newExpression.face.tear = fearLevel;
+    // should fix expression to choked or passedout
+    if (status.energy <= 0) {
+      newExpression = loadExpressionFromData('passedout');
+    }
+    if (status.oxygen <= 0) {
+      newExpression = loadExpressionFromData('chokedout');
+    }
 
-    // here I have an issue. deepEqual seems to be ignoring optional fields
-    // so we need to manually force requestExpressionUpdate for face.color
     const chokeLevel = Math.round((100 - status.oxygen) / 20);
     if (chokeLevel !== newExpression.face.color) {
       newExpression.face.color = chokeLevel;
@@ -119,6 +123,8 @@ export function EmotionProvider({ children }:IEmotionProviderProps) {
     if (chokeLevel > 3) {
       newExpression.face.pupilPosition = chokeLevel - 1;
     }
+
+    newExpression.face.tear = fearLevel;
 
     requestExpressionUpdate = !deepEqual(newExpression, expression);
 
