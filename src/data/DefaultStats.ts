@@ -42,7 +42,7 @@ const preference = {
   fear: -1,
   energy: 0,
   nutrition: 0,
-  oxygen: -0.3,
+  oxygen: 0.3,
   health: 0,
 };
 
@@ -58,6 +58,11 @@ const drift = {
   health: 0,
 };
 
+const ass = {
+  maxStretch: 0,
+  enemaCapacity: 0,
+};
+
 export default {
-  cleared, status, resistence, preference, drift,
+  cleared, status, resistence, preference, drift, ass,
 };

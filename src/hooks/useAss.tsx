@@ -18,6 +18,10 @@ interface IEmotionContextData {
   enemaLevel:number;
   getPain: ()=>number;
   getLust: ()=>number;
+  // eslint-disable-next-line no-unused-vars
+  initialize: (stats:{ maxStretch:number, enemaCapacity:number })=> void;
+  getStats: () => {maxStretch:number, enemaCapacity:number };
+
 }
 
 const updateAssInterval = 1000;
@@ -57,6 +61,14 @@ export function AssProvider({ children }:IAssProviderProps) {
 
   const [enemaCapacity, setEnemaCapacity] = useState(0);
   const [maxStretch, setMaxStretch] = useState(0);
+
+  function initialize(stats:{ maxStretch:number, enemaCapacity:number }) {
+    setMaxStretch(stats.maxStretch);
+    setEnemaCapacity(stats.enemaCapacity);
+  }
+  function getStats() {
+    return { maxStretch, enemaCapacity };
+  }
 
   function tryExpelEnema(force?:boolean) {
     if (depth === 0 || force) {
@@ -157,7 +169,16 @@ export function AssProvider({ children }:IAssProviderProps) {
   useInterval(() => { updateAss(); }, updateAssInterval);
   return (
     <AssContext.Provider value={{
-      depth, stretch, penetrateAss, addEnema, isExpelingEnema, enemaLevel, getPain, getLust,
+      depth,
+      stretch,
+      penetrateAss,
+      addEnema,
+      isExpelingEnema,
+      enemaLevel,
+      getPain,
+      getLust,
+      initialize,
+      getStats,
     }}
     >
       {children}
