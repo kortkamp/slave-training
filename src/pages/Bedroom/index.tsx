@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState } from 'react';
 import { Container } from './styles';
 
@@ -10,19 +9,16 @@ import backgroundImg from '../../assets/bgimage/bg/bed.jpg';
 import lyingImg from '../../assets/bgimage/bg/lying_bed.png';
 
 import bodyImg from '../../assets/fgimage/s/body/stn_b.png';
-import headImg from '../../assets/fgimage/s/body/stn_h1.png';
 import dressImg from '../../assets/fgimage/s/dress/F/a1.png';
 import armsImg from '../../assets/fgimage/s/body/stn_a.png';
-
-import eyeImg from '../../assets/fgimage/s/face/F/e_def.gif';
-import mouthImg from '../../assets/fgimage/s/face/F/m_def.png';
 
 import hairImg from '../../assets/fgimage/s/body/stn_fh.png';
 import { useSlave } from '../../hooks/useSlave';
 import ToolsBox from '../../components/ToolsBox';
+// import ExpressionMaker from '../../components/ExpressionMaker';
 
 const Bedroom = ():JSX.Element => {
-  const { sleep, load, status } = useSlave();
+  const { sleep } = useSlave();
   const [isLiingOn, setIsLiingOn] = useState(true);
   return (
     <Container>
@@ -47,6 +43,7 @@ const Bedroom = ():JSX.Element => {
       <button type="button" onClick={() => setIsLiingOn(!isLiingOn)}>LIE DOWN</button>
       <StatusBox />
       <ToolsBox />
+      {/* <ExpressionMaker /> */}
     </Container>
   );
 };
