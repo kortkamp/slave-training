@@ -17,6 +17,8 @@ interface ISlaveProviderProps {
 
 interface ISlaveContextData {
   status: ISlaveStatus;
+  preference: ISlaveStatus;
+  resistence: ISlaveStatus;
   // eslint-disable-next-line no-unused-vars
   dispatchStatus: ({ type, state }:IReducerStatusAction) => void;
   // eslint-disable-next-line no-unused-vars
@@ -78,23 +80,29 @@ function update(status:ISlaveStatus, preference:ISlaveStatus, resistence: ISlave
   newStatus.energy -= (drainFromLust + drainFromPain);
   newStatus.nutrition -= (drainFromLust + drainFromPain);
 
-  // update pain desire
-  const painDesireInfluence = (newStatus.pain * preference?.pain) / updateFrequecy;
-  newStatus.lust += painDesireInfluence;
-  newStatus.fear -= painDesireInfluence;
-
   if (newStatus.oxygen <= 0) {
     newStatus.health -= 0.15;
   }
-
   if (newStatus.nutrition <= 0) {
     newStatus.health += newStatus.nutrition;
     newStatus.nutrition = 0;
   }
 
-  newStatus.lust -= 0.01 * (0.1 * newStatus.lust + newStatus.fear);
+  // must be concious to update lust orgasm fear or pain
+  if (status.energy > 0 && status.oxygen > 0) {
+    // update pain desire
+    const painDesireInfluence = (newStatus.pain * preference?.pain) / updateFrequecy;
+    newStatus.lust += painDesireInfluence;
+    newStatus.fear -= painDesireInfluence;
 
-  newStatus.orgasm += (newStatus.lust - status.lust);
+    newStatus.lust -= 0.01 * (0.1 * newStatus.lust + newStatus.fear);
+
+    newStatus.orgasm += (newStatus.lust - status.lust);
+  } else {
+    newStatus.lust = 0;
+    newStatus.pain = 0;
+    newStatus.fear = 0;
+  }
 
   // check minimums
   if (newStatus.orgasm < 0) { newStatus.orgasm = 0; }
@@ -142,6 +150,7 @@ function initialState(name: 'status'|'resistence'|'preference') {
 }
 
 export function SlaveProvider({ children }:ISlaveProviderProps) {
+  // TODO add conscious level state.
   // ====== those should be persistent ============
 
   const [status, dispatchStatus] = useReducer(reducerStatus, Default.status, () => initialState('status'));
@@ -151,6 +160,7 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
   // =========== those should be reseted after load or sleep ===========
 
   const [conscious, setConcious] = useState<'awake'|'passedOut'|'chokedOut'|'sleep'>('awake');
+  const [slaveValue, setSlaveValue] = useState(0);
   const [chokingLevel, setChokingLevel] = useState(0);
   const [squirtingLevel, setSquirtingLevel] = useState(0);
   const [orgasmLevel, setOrgasmLevel] = useState(0);
@@ -285,6 +295,7 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
     api.Save('status', updatedStatus);
     api.Save('resistence', resistence);
     api.Save('preference', preference);
+    api.Save('ass', ass.getStats());
     dispatchStatus({ type: 'set', state: updatedStatus });
     // save status
     // save preference
@@ -294,6 +305,7 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
     dispatchStatus({ type: 'set', state: api.Load('status') });
     setPreference(api.Load('resistence'));
     setResistence(api.Load('preference'));
+    ass.initialize(api.Load('ass'));
   }
 
   useInterval(() => { updateSlave(); }, updateInterval);
@@ -302,6 +314,8 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
   return (
     <SlaveContext.Provider value={{
       status,
+      preference,
+      resistence,
       dispatchStatus,
       hurt,
       eat,
