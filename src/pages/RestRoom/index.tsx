@@ -13,6 +13,7 @@ import eyeImg from '../../assets/fgimage/s/face/R/e_def.gif';
 import mouthImg from '../../assets/fgimage/s/face/R/m_def.png';
 
 import hairImg from '../../assets/fgimage/s/body/sit_fh.png';
+import ToolsBox from '../../components/ToolsBox';
 
 const RestRoom = ():JSX.Element => (
   <Container>
@@ -26,7 +27,7 @@ const RestRoom = ():JSX.Element => (
     <img src={hairImg} alt="" />
     <img src={dressImg} alt="" />
     <img src={armsImg} alt="" />
-
+    <ToolsBox />
     <StatusBox />
   </Container>
 );
