@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-import { useState } from 'react';
 import { Container } from './styles';
 
 import Head from '../../components/Head';
@@ -16,29 +14,25 @@ import armsImg from '../../assets/fgimage/s/body/stn_a.png';
 import hairImg from '../../assets/fgimage/s/body/stn_fh.png';
 import { useSlave } from '../../hooks/useSlave';
 import ToolsBox from '../../components/ToolsBox';
-import ChatBox from '../../components/ChatBox';
+import ChatBox, { IChatSequence } from '../../components/ChatBox';
 // import ExpressionMaker from '../../components/ExpressionMaker';
 
 const Bedroom = ():JSX.Element => {
-  const { sleep } = useSlave();
-  const [isLiingOn, setIsLiingOn] = useState(false);
+  const { isSleeping, setIsSleeping } = useSlave();
 
-  const chat = [
-    { // 0
-      text: '[Slave] Yes Master...',
-      options: [
-        { text: 'Order to sleep', effect: () => { setIsLiingOn(true); return 0; } },
-        { text: 'Order to wake up', effect: () => { setIsLiingOn(false); return 0; } },
-      ],
-    },
-
-  ];
+  const chat:IChatSequence = { // 0
+    text: '[Slave] Yes Master...',
+    options: [
+      { text: 'Order to sleep', action: () => { setIsSleeping(true); } },
+      { text: 'Order to wake up', action: () => { setIsSleeping(false); } },
+    ],
+  };
   return (
     <Container>
 
       <img className="background" src={backgroundImg} alt="" />
 
-      {isLiingOn
+      {isSleeping
         ? <img src={lyingImg} alt="" />
         : (
           <>
@@ -52,9 +46,7 @@ const Bedroom = ():JSX.Element => {
           </>
         )}
 
-      <button type="button" onClick={() => { if (isLiingOn) sleep(); }}>SLEEP</button>
-      <button type="button" onClick={() => setIsLiingOn(!isLiingOn)}>LIE DOWN</button>
-      <ChatBox chat={chat} />
+      <ChatBox initchat={chat} />
       <StatusBox />
       <ToolsBox />
       {/* <ExpressionMaker /> */}

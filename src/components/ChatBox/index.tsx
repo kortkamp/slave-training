@@ -1,33 +1,50 @@
-/* eslint-disable react/destructuring-assignment */
 import { useState } from 'react';
 import { Container, Option } from './styles';
 
 interface IChatOption {
   text: string;
-  effect: () => number;
+  action: () => void;
+  next?: IChatSequence|undefined;
+  reset?: boolean;
+  finish?:boolean;
 }
-interface IChatSequence {
+export interface IChatSequence {
+  // eslint-disable-next-line react/no-unused-prop-types
   text: string;
+  // eslint-disable-next-line react/no-unused-prop-types
   options: IChatOption[];
 }
 
-const ChatBox = (props:{chat:IChatSequence[]}):JSX.Element => {
-  const [step, setStep] = useState(0);
-
-  const { chat } = props;
+const ChatBox = ({ initchat }:{initchat:IChatSequence}):JSX.Element => {
+  const [chat, setChat] = useState<IChatSequence|undefined>(initchat);
 
   return (
     <Container>
+
       <div className="text">
-        { chat[step].text }
+        { chat?.text || '...'}
       </div>
       <div className="options">
-        {chat[step].options.map((option) => (
-          <Option onClick={() => { setStep(option.effect()); }}>
+        {chat?.options.map((option) => (
+          <Option
+            onClick={() => {
+              option.action();
+              if (option.next) {
+                setChat(option.next);
+              }
+              if (option.reset) {
+                setChat(initchat);
+              }
+              if (option.finish) {
+                setChat(undefined);
+              }
+            }}
+          >
             {option.text}
           </Option>
         ))}
       </div>
+
     </Container>
   );
 };

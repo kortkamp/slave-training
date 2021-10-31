@@ -38,6 +38,7 @@ import FoodModal from '../../components/FoodModal';
 import foodIco from '../../assets/food.svg';
 import { IFood } from '../../interfaces';
 import { useSlave } from '../../hooks/useSlave';
+import ChatBox, { IChatSequence } from '../../components/ChatBox';
 
 const eatingArm = [
   leftArmDown, leftArmUpHolding, leftArmUpHolding2,
@@ -92,7 +93,7 @@ const Kitchen = ():JSX.Element => {
 
   const [isFoodModalOpen, setIsFoodModalOpen] = useState(false);
 
-  const { eat } = useSlave();
+  const { eat, isSleeping } = useSlave();
 
   useEffect(() => {
     // here we must check -1 cuz animation scene
@@ -135,51 +136,61 @@ const Kitchen = ():JSX.Element => {
     setFood((value) => value + ammount);
   }
 
+  const chat:IChatSequence = { // 0
+    text: '[Slave] Yes Master...',
+    options: [
+      { text: 'Order to eat', action: () => { setIsEating(true); } },
+      { text: 'Order to stop', action: () => { setIsEating(false); } },
+    ],
+  };
+
   return (
     <Container>
 
       <img className="background" src={backgroundImg} alt="" />
+
       <Scene>
         <img src={chairImg} alt="" />
 
-        {isEating
-          ? <img src={eatingArm[data[eatAnimation].arm]} alt="" />
-          : <img src={leftArmDown} alt="" />}
+        { !isSleeping
+          && (
+            <>
+              {isEating
+                ? <img src={eatingArm[data[eatAnimation].arm]} alt="" />
+                : <img src={leftArmDown} alt="" />}
 
-        {data[eatAnimation].arm === 1 && isEating
+              {data[eatAnimation].arm === 1 && isEating
         && <img src={breadHandImg} alt="" />}
-        <img src={bodyImg} alt="" />
-        <img src={dressImg} alt="" />
-        <img src={rightArm} alt="" />
-        <img src={headImg} alt="" />
-        {isEating
-          ? (
-            <>
-              <img src={eye[data[eatAnimation].eye]} alt="" />
-              <img src={mouth[data[eatAnimation].mouth]} alt="" />
-            </>
-          )
-          : (
-            <>
-              <img src={eyesImg} alt="" />
-              <img src={mouthDef} alt="" />
-            </>
-          )}
+              <img src={bodyImg} alt="" />
+              <img src={dressImg} alt="" />
+              <img src={rightArm} alt="" />
+              <img src={headImg} alt="" />
+              {isEating
+                ? (
+                  <>
+                    <img src={eye[data[eatAnimation].eye]} alt="" />
+                    <img src={mouth[data[eatAnimation].mouth]} alt="" />
+                  </>
+                )
+                : (
+                  <>
+                    <img src={eyesImg} alt="" />
+                    <img src={mouthDef} alt="" />
+                  </>
+                )}
 
-        <img src={frontHairImg} alt="" />
+              <img src={frontHairImg} alt="" />
+            </>
+          ) }
 
         <img src={tableImg} alt="" />
         <img src={dishImg} alt="" />
         <img src={foodImages[food]} alt="" />
       </Scene>
 
-      <button
-        type="button"
-        onClick={() => { setIsEating(!isEating); }}
-      >
-        {isEating ? 'eat' : 'dont'}
-      </button>
       <StatusBox />
+      <ChatBox initchat={chat} />
+
       <ToolsBox>
         <button type="button" onClick={() => setIsFoodModalOpen(true)}>
           <img src={foodIco} alt="Food" />
