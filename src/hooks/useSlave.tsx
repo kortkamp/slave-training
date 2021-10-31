@@ -30,6 +30,8 @@ interface ISlaveContextData {
   chokingLevel: number;
   // eslint-disable-next-line no-unused-vars
   setChokingLevel: (value:number) => void;
+  isSleeping: boolean;
+  setIsSleeping: (value:boolean) => void;
   sleep: ()=>void;
   load: ()=>void;
 }
@@ -151,7 +153,9 @@ function initialState(name: 'status'|'resistence'|'preference') {
 
 export function SlaveProvider({ children }:ISlaveProviderProps) {
   // TODO add conscious level state.
-  // ====== those should be persistent ============
+
+  // TODO add isSleeping and if true, each update add 2* energy drift. Check if fear is too
+  // much and prevent sleep.
 
   const [status, dispatchStatus] = useReducer(reducerStatus, Default.status, () => initialState('status'));
   const [resistence, setResistence] = useState(() => initialState('resistence'));
@@ -164,8 +168,14 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
   const [chokingLevel, setChokingLevel] = useState(0);
   const [squirtingLevel, setSquirtingLevel] = useState(0);
   const [orgasmLevel, setOrgasmLevel] = useState(0);
+  const [isSleeping, setIsSleeping] = useState(false);
   const { buildExpression } = useEmotion();
   const ass = useAss();
+
+  function addPartialStatus(partialStatus: IPartialStatus) {
+    const newStatus = { ...Default.cleared, ...partialStatus };
+    dispatchStatus({ type: 'add', state: newStatus });
+  }
 
   function doSquirt(level:number) {
     setSquirtingLevel(level);
@@ -262,6 +272,9 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
   }
 
   function updateSlave() {
+    if (isSleeping) {
+      addPartialStatus({ energy: -2 * Default.drift.energy });
+    }
     dispatchStatus({
       type: 'update', state: status, preference, resistence,
     });
@@ -273,10 +286,11 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
   }
 
   function hurt(value:number) {
-    dispatchStatus({
-      type: 'add',
-      state: { ...Default.cleared, pain: value, health: -0.1 * value },
-    });
+    // dispatchStatus({
+    //   type: 'add',
+    //   state: { ...Default.cleared, pain: value, health: -0.1 * value },
+    // });
+    addPartialStatus({ health: -0.1 * value, pain: value });
   }
 
   function eat(food:IFood) {
@@ -285,6 +299,11 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
       state: { ...Default.cleared, nutrition: food.nutrition, fear: -food.moral },
     });
   }
+
+  interface IPartialStatus extends Partial<ISlaveStatus> {
+
+  }
+
   // 8 hours of sleep must fill 100% energy and costs 30% nutrition
   function sleep() {
     const ammount = 2;
@@ -322,6 +341,8 @@ export function SlaveProvider({ children }:ISlaveProviderProps) {
       chokingLevel,
       orgasmLevel,
       setChokingLevel,
+      setIsSleeping,
+      isSleeping,
       squirtingLevel,
       sleep,
       load,

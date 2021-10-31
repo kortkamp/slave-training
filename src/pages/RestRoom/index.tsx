@@ -14,21 +14,31 @@ import mouthImg from '../../assets/fgimage/s/face/R/m_def.png';
 
 import hairImg from '../../assets/fgimage/s/body/sit_fh.png';
 import ToolsBox from '../../components/ToolsBox';
+import { useSlave } from '../../hooks/useSlave';
 
-const RestRoom = ():JSX.Element => (
-  <Container>
+const RestRoom = ():JSX.Element => {
+  const { isSleeping } = useSlave();
+  return (
+    <Container>
 
-    <img className="background" src={backgroundImg} alt="" />
+      <img className="background" src={backgroundImg} alt="" />
 
-    <img src={bodyImg} alt="" />
-    <img src={headImg} alt="" />
-    <img src={eyeImg} alt="" />
-    <img src={mouthImg} alt="" />
-    <img src={hairImg} alt="" />
-    <img src={dressImg} alt="" />
-    <img src={armsImg} alt="" />
-    <ToolsBox />
-    <StatusBox />
-  </Container>
-);
+      { !isSleeping
+    && (
+    <>
+      <img src={bodyImg} alt="" />
+      <img src={headImg} alt="" />
+      <img src={eyeImg} alt="" />
+      <img src={mouthImg} alt="" />
+      <img src={hairImg} alt="" />
+      <img src={dressImg} alt="" />
+      <img src={armsImg} alt="" />
+
+    </>
+    )}
+      <ToolsBox />
+      <StatusBox />
+    </Container>
+  );
+};
 export default RestRoom;
