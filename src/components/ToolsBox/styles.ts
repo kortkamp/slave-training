@@ -10,6 +10,8 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 20px;
   padding:10px;
+  background: rgba(200,200,200,0.5);
+  border-radius: 20px;
   /* z-index: var(--tool-box-z-index); */
 
   button {
